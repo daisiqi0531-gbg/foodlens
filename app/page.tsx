@@ -81,6 +81,7 @@ export default function Home() {
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [filtered, setFiltered] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
+  const [showNovaInfo, setShowNovaInfo] = useState(false);
   const debounceRef = useRef<any>(null);
 
   useEffect(() => {
@@ -95,7 +96,7 @@ export default function Home() {
   const exampleChips = [
     { label: "🌱 Banana", query: "banana" },
     { label: "😊 Olive oil", query: "olive oil" },
-    { label: "🤔 Sourdough bread", query: "sourdough bread" },
+    { label: "🤔 Cornflakes", query: "cornflakes" },
     { label: "🫣 Pepperoni", query: "pepperoni sausage" },
   ];
 
@@ -128,7 +129,6 @@ export default function Home() {
       });
       const data = await res.json();
       const product = data.product || null;
-      console.log("OFF raw result:", JSON.stringify(product));
       return product;
     } catch (err) {
       console.error("Search error:", err);
@@ -215,19 +215,6 @@ export default function Home() {
         </div>
 
         <p className="text-2xl md:text-3xl font-normal mb-3 leading-tight italic text-gray-700 dark:text-gray-100">Food clarity, made simple.</p>
-
-        <p className="text-sm text-gray-400 mb-0">
-          Check how processed your food is (
-          <a
-            href="https://nutritionsource.hsph.harvard.edu/processed-foods/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-          >
-            NOVA classification
-          </a>
-          )
-        </p>
       </div>
 
       {/* Main content - grows to fill available space */}
@@ -238,7 +225,7 @@ export default function Home() {
             <div className="relative flex-1">
               <input
                 type="text"
-                placeholder="Try: ICA milk, Coop bread, Oatly oat drink"
+                placeholder="Search any food or brand..."
                 value={food}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -258,7 +245,7 @@ export default function Home() {
                     analyzeFood();
                   }
                 }}
-                className="w-full px-3 py-2 md:px-4 md:py-3 pr-10 text-base md:text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                className="w-full px-3 py-2 md:px-4 md:py-3 pr-10 text-base md:text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
               />
               
               {/* Clear button */}
@@ -331,7 +318,17 @@ export default function Home() {
 
         {/* Example chips */}
         {!result && !food.trim() && (
-          <div className="w-full max-w-md mt-3 md:mt-4">
+          <>
+          <p className="text-xs text-gray-400 text-center mt-4 mb-1">
+            Check how processed your food is, based on{" "}
+            <button
+              onClick={() => setShowNovaInfo(true)}
+              className="text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            >
+              NOVA classification
+            </button>
+          </p>
+          <div className="w-full max-w-md mt-3 md:mt-4 mb-6 md:mb-0">
             <p className="text-xs text-gray-400 text-center mb-2">Try these:</p>
             <div className="flex flex-wrap justify-center gap-2">
               {exampleChips.map((chip) => (
@@ -348,6 +345,7 @@ export default function Home() {
               ))}
             </div>
           </div>
+          </>
         )}
 
         {/* Loading spinner */}
@@ -371,7 +369,7 @@ export default function Home() {
         {/* Result Card */}
         {result && (
           <div
-            className="w-full max-w-md mt-1 transition-all duration-500 ease-out"
+            className="w-full max-w-md mt-1 mb-8 transition-all duration-500 ease-out"
             style={{ animation: "slideIn 0.4s ease-out" }}
           >
             <ResultCard result={result} />
@@ -388,18 +386,70 @@ export default function Home() {
         </div>
       )}
 
+      {showNovaInfo && (
+        <div
+          className="fixed inset-0 z-50 flex items-end md:items-center justify-center"
+          onClick={() => setShowNovaInfo(false)}
+        >
+          <div className="absolute inset-0 bg-black/40" />
+          <div
+            className="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl p-6 shadow-xl z-10"
+            style={{ animation: "slideIn 0.3s ease-out" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowNovaInfo(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              ✕
+            </button>
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
+              What is NOVA classification?
+            </h2>
+            <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+              <p>
+                NOVA is a food classification system that groups foods into 4 categories based on the extent and purpose of their processing.
+              </p>
+              <div className="space-y-2">
+                <p><span className="text-green-600 font-semibold">Group 1</span> — Unprocessed or minimally processed foods (fruits, vegetables, eggs, meat)</p>
+                <p><span className="text-lime-600 font-semibold">Group 2</span> — Processed culinary ingredients (oils, butter, sugar, salt)</p>
+                <p><span className="text-orange-500 font-semibold">Group 3</span> — Processed foods (canned goods, cheese, cured meats, freshly baked bread)</p>
+                <p><span className="text-red-500 font-semibold">Group 4</span> — Ultra-processed foods (soft drinks, packaged snacks, instant noodles, reconstituted meat products)</p>
+              </div>
+              <p className="text-xs text-gray-400 pt-1">
+                Research links high consumption of ultra-processed foods to increased risk of obesity, diabetes, and cardiovascular disease.
+              </p>
+            </div>
+            <a
+              href="https://nutritionsource.hsph.harvard.edu/processed-foods/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-block text-xs text-gray-400 underline hover:text-gray-600 transition-colors"
+            >
+              Learn more at Harvard T.H. Chan School of Public Health →
+            </a>
+          </div>
+        </div>
+      )}
+
       {/* Footer */}
       <footer className="w-full max-w-md mt-auto pt-8 pb-6 text-center border-t border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-400 leading-relaxed mb-4">
           FoodLens provides general food information based on the NOVA classification system. Results are for informational purposes only and do not constitute medical, nutritional, or dietary advice. Always consult a qualified health professional before making changes to your diet.
         </p>
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
           <a
             href="/privacy"
             className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
             Privacy Policy
           </a>
+          <button
+            onClick={() => setShowNovaInfo(true)}
+            className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          >
+            What is NOVA classification?
+          </button>
         </div>
       </footer>
     </div>

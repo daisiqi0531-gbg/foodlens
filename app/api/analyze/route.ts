@@ -26,7 +26,6 @@ interface AnalyzeResult {
   betterChoice: { text: string; adSlot: boolean } | null;
   estimated: boolean;
   source: "openfoodfacts" | "estimated";
-  correctedQuery: string | null;
   notFound: boolean;
 }
 
@@ -62,18 +61,19 @@ const commonFoods = [
   "oats", "pizza", "burger", "sausage", "bacon",
   "chocolate", "chips", "soda", "candy", "coffee",
   "olive oil", "honey", "tofu", "avocado",
+  "corn flakes", "cornflakes", "cereal",
 ];
 
 const brandSuggestionsByCategory: Record<string, string[]> = {
   sausage: ["Scan", "Kronfagel"],
   meat: ["Scan", "Kronfagel"],
   chicken: ["Scan", "Kronfagel"],
-  dairy: ["Arla", "Skanemejerier"],
-  milk: ["Arla", "Skanemejerier"],
-  yogurt: ["Arla", "Skanemejerier"],
-  yoghurt: ["Arla", "Skanemejerier"],
-  cheese: ["Arla", "Skanemejerier"],
-  bread: ["Pagen", "Polarbrod"],
+  dairy: ["Arla", "Skånemejerier"],
+  milk: ["Arla", "Skånemejerier"],
+  yogurt: ["Arla", "Skånemejerier"],
+  yoghurt: ["Arla", "Skånemejerier"],
+  cheese: ["Arla", "Skånemejerier"],
+  bread: ["Pågen", "Polarbröd"],
   snack: ["OLW", "Estrella"],
   chips: ["OLW", "Estrella"],
   frozen: ["Findus", "Felix"],
@@ -239,7 +239,6 @@ function translateIngredients(rawIngredients: string | null): string | null {
     [/\boeuf\b/gi, "Egg"],
     [/\blait\b/gi, "Milk"],
     [/\bcreme\b/gi, "Cream"],
-    [/\bcreme\b/gi, "Cream"],
     [/\bsel\b/gi, "Salt"],
     [/\bsucre\b/gi, "Sugar"],
     [/\bfarine\b/gi, "Flour"],
@@ -255,7 +254,6 @@ function translateIngredients(rawIngredients: string | null): string | null {
 
   const nonEnglishMarkers = [
     "lait",
-    "creme",
     "creme",
     "sel",
     "sucre",
@@ -294,10 +292,11 @@ function getCategoryOverrideLevel(food: string): number | null {
 
   if (includesAny(text, level4Terms)) return 4;
 
-  const level3Terms = ["bread", "pasta", "rice cakes", "canned", "sauce", "dressings", "dressing"];
+  const level3Terms = ["bread", "pasta", "rice cakes", "canned", "sauce", "dressings", "dressing",
+    "corn flakes", "cornflakes", "cereal", "granola", "muesli"];
   if (includesAny(text, level3Terms)) return 3;
 
-  const level2Terms = ["plain yogurt", "plain yoghurt", "cheese", "butter", "cream"];
+  const level2Terms = ["plain yogurt", "plain yoghurt", "plain cheese", "plain butter", "plain cream", "plain milk", "plain oats"];
   if (includesAny(text, level2Terms)) return 2;
 
   const level1FreshTerms = [
@@ -308,7 +307,7 @@ function getCategoryOverrideLevel(food: string): number | null {
   if (includesAny(text, level1FreshTerms)) return 1;
 
   const curedTerms = ["cured", "smoked", "deli", "bacon", "ham", "salami", "sausage"];
-  const plainMeatFishTerms = ["plain meat", "plain fish", "fresh fish", "fish", "meat"];
+  const plainMeatFishTerms = ["plain meat", "plain fish", "fresh fish", "fresh meat", "raw fish", "raw meat"];
   if (includesAny(text, plainMeatFishTerms) && !includesAny(text, curedTerms)) return 1;
 
   return null;
@@ -449,6 +448,13 @@ function getBetterChoice(food: string, level: number): { text: string; adSlot: b
     };
   }
 
+  if (includesAny(text, ["cornflakes", "corn flakes", "cereal", "granola", "muesli"])) {
+    return {
+      text: "Try plain oats or unsweetened muesli — look for options with no added sugar or flavourings. Lindahls or ICA Ekologisk are good starting points.",
+      adSlot: true,
+    };
+  }
+
   if (includesAny(text, ["sauce", "dressing"])) {
     return {
       text: "Make your own dressing with olive oil, lemon and herbs - or check labels for options without added sugar.",
@@ -507,16 +513,12 @@ function buildResult(food: string, offProduct?: AnalyzeRequest["offProduct"]): A
       betterChoice: null,
       estimated: false,
       source: "estimated",
-      correctedQuery: null,
       notFound: true,
     };
   }
 
-  const correctedQuery = findTypoCorrection(food);
-  const foodForAnalysis = correctedQuery ?? food;
-
-  const { level, estimated } = estimateLevel(foodForAnalysis, offProduct);
-  const brandFields = buildBrandFields(foodForAnalysis, offProduct);
+  const { level, estimated } = estimateLevel(food, offProduct);
+  const brandFields = buildBrandFields(food, offProduct);
 
   const ingredients = translateIngredients(offProduct?.ingredients_text?.trim() || null);
   const additives = (offProduct?.additives_tags ?? []).map((t) => t.replace(/^en:/i, "").toUpperCase());
@@ -538,10 +540,9 @@ function buildResult(food: string, offProduct?: AnalyzeRequest["offProduct"]): A
     ingredients: level === 1 ? null : ingredients,
     harmfulIngredients,
     reason: buildDynamicReason(level, harmfulIngredients, additives),
-    betterChoice: getBetterChoice(foodForAnalysis, level),
+    betterChoice: getBetterChoice(food, level),
     estimated,
     source: offProduct ? "openfoodfacts" : "estimated",
-    correctedQuery,
     notFound: false,
   };
 }
