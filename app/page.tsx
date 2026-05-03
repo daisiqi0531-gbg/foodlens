@@ -199,10 +199,10 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen flex flex-col items-center justify-start px-4 pt-16 font-sans bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
+      className="min-h-screen flex flex-col items-center justify-start px-4 pt-8 md:pt-16 font-sans bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
     >
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-4 md:mb-8">
         <div className="flex items-center justify-center gap-2 mb-1">
           <img 
             src="/logo.svg" 
@@ -214,7 +214,7 @@ export default function Home() {
           </h1>
         </div>
 
-        <p className="text-3xl font-semibold mb-3 leading-tight italic text-gray-700 dark:text-gray-100">Food clarity, made simple.</p>
+        <p className="text-2xl md:text-3xl font-normal mb-3 leading-tight italic text-gray-700 dark:text-gray-100">Food clarity, made simple.</p>
 
         <p className="text-sm text-gray-400 mb-0">
           Check how processed your food is (
@@ -233,7 +233,7 @@ export default function Home() {
       {/* Main content - grows to fill available space */}
       <div className="flex-1 w-full flex flex-col items-center">
         {/* Search Input */}
-        <div className="w-full max-w-md mt-2 relative">
+        <div className="w-full max-w-md mt-1 md:mt-2 relative">
           <div className="flex gap-[10px] relative">
             <div className="relative flex-1">
               <input
@@ -258,7 +258,7 @@ export default function Home() {
                     analyzeFood();
                   }
                 }}
-                className="w-full px-4 py-3 pr-10 text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                className="w-full px-3 py-2 md:px-4 md:py-3 pr-10 text-base md:text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
               />
               
               {/* Clear button */}
@@ -293,7 +293,7 @@ export default function Home() {
             <button
               onClick={() => analyzeFood()}
               suppressHydrationWarning
-              className={`px-6 py-3 text-base font-medium rounded-lg text-white whitespace-nowrap transition-colors cursor-pointer ${
+              className={`px-4 py-2 text-sm md:px-6 md:py-3 md:text-base font-medium rounded-lg text-white whitespace-nowrap transition-colors cursor-pointer ${
                 loading
                   ? "bg-gray-400 dark:bg-gray-600 opacity-80"
                   : "bg-gray-900 dark:bg-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200"
@@ -331,7 +331,7 @@ export default function Home() {
 
         {/* Example chips */}
         {!result && !food.trim() && (
-          <div className="w-full max-w-md mt-4">
+          <div className="w-full max-w-md mt-3 md:mt-4">
             <p className="text-xs text-gray-400 text-center mb-2">Try these:</p>
             <div className="flex flex-wrap justify-center gap-2">
               {exampleChips.map((chip) => (
