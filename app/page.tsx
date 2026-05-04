@@ -247,7 +247,7 @@ export default function Home() {
       className="min-h-screen flex flex-col items-center justify-start px-4 pt-8 md:pt-16 font-sans bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100"
     >
       {/* Header */}
-      <div className="text-center mb-4 md:mb-8">
+      <div className="text-center mb-2 md:mb-4">
         <button
           onClick={() => {
             setFood("");
@@ -255,7 +255,7 @@ export default function Home() {
             setError(null);
             setFiltered([]);
           }}
-          className="flex items-center justify-center gap-2 mb-1 cursor-pointer hover:opacity-70 transition-opacity"
+          className="inline-flex items-center justify-center gap-2 mb-1 cursor-pointer hover:opacity-70 transition-opacity"
           aria-label="Go to home"
         >
           <img 
@@ -268,7 +268,7 @@ export default function Home() {
           </h1>
         </button>
 
-        <p className="text-2xl md:text-3xl font-normal mb-3 leading-tight italic text-gray-700 dark:text-gray-100">Food clarity, made simple.</p>
+        <p className="text-2xl md:text-3xl font-normal mb-1 leading-tight italic text-gray-700 dark:text-gray-100">Food clarity, made simple.</p>
       </div>
 
       {/* Main content - grows to fill available space */}
@@ -373,7 +373,7 @@ export default function Home() {
         {/* Example chips */}
         {!result && !food.trim() && (
           <>
-          <p className="text-xs text-gray-400 text-center mt-4 mb-1">
+          <p className="text-xs text-gray-400 text-center mt-4 mb-2">
             Check how processed your food is, based on{" "}
             <button
               onClick={() => setShowNovaInfo(true)}
@@ -382,7 +382,7 @@ export default function Home() {
               NOVA classification
             </button>
           </p>
-          <div className="w-full max-w-md mt-3 md:mt-4 mb-6 md:mb-0">
+          <div className="w-full max-w-md mt-2 mb-0">
             <p className="text-xs text-gray-400 text-center mb-2">Try these:</p>
             <div className="flex flex-wrap justify-center gap-2">
               {exampleChips.map((chip) => (
@@ -400,7 +400,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-full max-w-md mt-6">
+          <div className="w-full max-w-md mt-8">
+            <div className="border-t border-gray-200 dark:border-gray-700 mb-3" />
             <p className="text-xs text-gray-400 text-center mb-3">Did you know?</p>
             <div className="flex gap-2 mb-3 justify-center">
               <button
