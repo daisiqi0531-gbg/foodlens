@@ -6,11 +6,11 @@ import { ingredients, type Ingredient } from "../../data/ingredients";
 const categoryLabels: Record<string, string> = {
   all: "All",
   "e-numbers": "E-numbers",
-  sweeteners: "Sweeteners",
   preservatives: "Preservatives",
+  sweeteners: "Sweeteners",
   fats: "Fats & Oils",
+  thickeners: "Thickeners & Stabilisers",
   flavour: "Flavour",
-  thickeners: "Thickeners",
   marketing: "Marketing terms",
 };
 
@@ -51,7 +51,7 @@ export default function IngredientsPage() {
       <div className="max-w-2xl mx-auto">
         <Link
           href="/"
-          className="text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors mb-6 inline-block"
+          className="text-sm text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 transition-colors mb-6 inline-block"
         >
           ← Back to FoodLens
         </Link>
@@ -59,7 +59,7 @@ export default function IngredientsPage() {
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-1">
           What's in your food?
         </h1>
-        <p className="text-sm text-gray-400 mb-6 leading-relaxed">
+        <p className="text-sm text-gray-600 dark:text-gray-200 mb-6 leading-relaxed">
           Common food ingredients explained in plain English — what they are, why they're used, and whether to worry.
         </p>
 
@@ -73,15 +73,15 @@ export default function IngredientsPage() {
         />
 
         {/* Category tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           {Object.entries(categoryLabels).map(([key, label]) => (
             <button
               key={key}
               onClick={() => setCategory(key)}
-              className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 category === key
                   ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900"
-                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400"
+                  : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-200"
               }`}
             >
               {label}
@@ -89,8 +89,14 @@ export default function IngredientsPage() {
           ))}
         </div>
 
+        {category === "marketing" && (
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 leading-relaxed bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
+            These aren't ingredients — they're claims on packaging that are often misunderstood.
+          </p>
+        )}
+
         {/* Count */}
-        <p className="text-xs text-gray-400 mb-4">
+        <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">
           {filtered.length} ingredient{filtered.length !== 1 ? "s" : ""}
         </p>
 
@@ -100,19 +106,21 @@ export default function IngredientsPage() {
             <button
               key={ingredient.id}
               onClick={() => setSelected(ingredient)}
-              className="text-left bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
+              className="text-left bg-white dark:bg-gray-800/80 border border-gray-200 dark:border-gray-600 rounded-xl p-4 hover:border-gray-400 dark:hover:border-gray-500 transition-colors"
             >
               <div className="flex items-start justify-between gap-2 mb-2">
-                <span className="font-semibold text-gray-900 dark:text-white text-sm">
+                <span className="font-semibold text-gray-900 dark:text-white text-base">
                   {ingredient.name}
                 </span>
-                <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${novaBg[ingredient.novaSignal]}`}>
-                  {novaLabel[ingredient.novaSignal]}
-                </span>
+                {ingredient.category !== "marketing" && (
+                  <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${novaBg[ingredient.novaSignal]}`}>
+                    {novaLabel[ingredient.novaSignal]}
+                  </span>
+                )}
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-gray-200 leading-relaxed">
                 {ingredient.fullName !== ingredient.name && (
-                  <span className="block text-gray-400 dark:text-gray-500 mb-1 italic">
+                  <span className="block text-gray-500 dark:text-gray-300 mb-1 italic">
                     {ingredient.fullName}
                   </span>
                 )}
@@ -160,23 +168,25 @@ export default function IngredientsPage() {
                   <p className="text-sm text-gray-400 italic">{selected.fullName}</p>
                 )}
               </div>
-              <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 ${novaBg[selected.novaSignal]}`}>
-                {novaLabel[selected.novaSignal]}
-              </span>
+              {selected.category !== "marketing" && (
+                <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 ${novaBg[selected.novaSignal]}`}>
+                  {novaLabel[selected.novaSignal]}
+                </span>
+              )}
             </div>
 
             <div className="space-y-4 text-sm">
               <div>
                 <p className="font-semibold text-gray-900 dark:text-white mb-1">What it is</p>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{selected.whatItIs}</p>
+                <p className="text-gray-600 dark:text-gray-100 leading-relaxed">{selected.whatItIs}</p>
               </div>
               <div>
                 <p className="font-semibold text-gray-900 dark:text-white mb-1">Why it's used</p>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{selected.whyUsed}</p>
+                <p className="text-gray-600 dark:text-gray-100 leading-relaxed">{selected.whyUsed}</p>
               </div>
               <div>
                 <p className="font-semibold text-gray-900 dark:text-white mb-1">Should I worry?</p>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{selected.shouldWorry}</p>
+                <p className="text-gray-600 dark:text-gray-100 leading-relaxed">{selected.shouldWorry}</p>
               </div>
               <div>
                 <p className="font-semibold text-gray-900 dark:text-white mb-1">Commonly found in</p>
@@ -184,7 +194,7 @@ export default function IngredientsPage() {
                   {selected.foundIn.map((item) => (
                     <span
                       key={item}
-                      className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-2 py-1 rounded-full"
+                      className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white px-2 py-1 rounded-full"
                     >
                       {item}
                     </span>
