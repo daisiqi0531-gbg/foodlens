@@ -248,7 +248,16 @@ export default function Home() {
     >
       {/* Header */}
       <div className="text-center mb-4 md:mb-8">
-        <div className="flex items-center justify-center gap-2 mb-1">
+        <button
+          onClick={() => {
+            setFood("");
+            setResult(null);
+            setError(null);
+            setFiltered([]);
+          }}
+          className="flex items-center justify-center gap-2 mb-1 cursor-pointer hover:opacity-70 transition-opacity"
+          aria-label="Go to home"
+        >
           <img 
             src="/logo.svg" 
             alt="FoodLens logo" 
@@ -257,7 +266,7 @@ export default function Home() {
           <h1 className="text-lg font-semibold tracking-tight">
             FoodLens
           </h1>
-        </div>
+        </button>
 
         <p className="text-2xl md:text-3xl font-normal mb-3 leading-tight italic text-gray-700 dark:text-gray-100">Food clarity, made simple.</p>
       </div>
