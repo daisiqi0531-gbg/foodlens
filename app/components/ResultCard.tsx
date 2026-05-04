@@ -1,4 +1,5 @@
 "use client";
+import { IngredientBullets } from "./IngredientBullets";
 
 export interface AnalyzeResult {
   level: number;
@@ -140,7 +141,7 @@ export function ResultCard({ result }: ResultCardProps) {
       {result.level >= 3 && result.reason && (
         <div className="mt-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300">Why?</p>
-          <p className="mt-1 text-sm text-gray-800 dark:text-gray-100">{result.reason}</p>
+          <IngredientBullets text={result.reason ?? ""} />
           <a
             href="/ingredients"
             className="mt-2 inline-block text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"

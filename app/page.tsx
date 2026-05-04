@@ -14,6 +14,11 @@ const didYouKnowData = {
     { emoji: "🍯", food: "Honey", query: "honey", surprise: "It's basically sugar", label: "😊 Level 2 — Everyday ingredient" },
     { emoji: "🐟", food: "Sardines", query: "sardines", surprise: "Canned fish seems processed", label: "😊 Level 2 — Everyday ingredient" },
     { emoji: "🥦", food: "Frozen veg", query: "frozen vegetables", surprise: "Fresh is always better, right?", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🥒", food: "Kimchi", query: "kimchi", surprise: "Fermented food seems processed", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🍜", food: "Miso paste", query: "miso paste", surprise: "Looks like a processed product", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🥥", food: "Coconut milk", query: "coconut milk", surprise: "Seems like a processed drink", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🐟", food: "Fish sauce", query: "fish sauce", surprise: "Smells intense, must be processed", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🍚", food: "Tapai", query: "tapai", surprise: "Fermented food sounds processed", label: "😊 Level 2 — Everyday ingredient" },
   ],
   worse: [
     { emoji: "🍓", food: "Flavoured yogurt", query: "flavoured yogurt", surprise: "It's yogurt, it's healthy", label: "🫣 Level 4 — Keep as a treat" },
@@ -26,6 +31,9 @@ const didYouKnowData = {
     { emoji: "🎑", food: "Rice cakes", query: "rice cakes", surprise: "Light diet food", label: "🤔 Level 3 — Occasionally" },
     { emoji: "🥤", food: "Smoothie (bottled)", query: "bottled smoothie", surprise: "It's just fruit", label: "🤔 Level 3 — Occasionally" },
     { emoji: "🥜", food: "Flavoured nuts", query: "flavoured nuts", surprise: "Nuts are healthy", label: "🤔 Level 3 — Occasionally" },
+    { emoji: "🍜", food: "Instant ramen", query: "instant ramen", surprise: "It's just noodles, right?", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🍱", food: "Teriyaki sauce", query: "teriyaki sauce", surprise: "Just a simple glaze", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🥟", food: "Frozen dumplings", query: "frozen dumpling", surprise: "Just meat and dough", label: "🫣 Level 4 — Keep as a treat" },
   ]
 };
 
