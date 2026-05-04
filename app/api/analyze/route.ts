@@ -22,7 +22,6 @@ interface AnalyzeResult {
   suggestedBrands: string[] | null;
   ingredients: string | null;
   harmfulIngredients: string[] | null;
-  reason: string | null;
   betterChoice: { text: string; adSlot: boolean } | null;
   estimated: boolean;
   source: "openfoodfacts" | "estimated";
@@ -73,9 +72,33 @@ const commonFoods = [
   "coconut oil", "creme fraiche",
   "herring", "dark chocolate", "granola",
   "rice cakes", "instant oats",
-  "havregryn", "knackebrod", "knäckebröd",
+  "havregryn", "oatmeal", "knackebrod", "knäckebröd",
   "falukorv", "kottbullar", "köttbullar",
   "wasa", "leksands",
+  // Dairy & basics
+  "plain yogurt", "full fat yogurt", "full fat milk", "canned tomatoes",
+  "plain nuts", "almonds", "popcorn",
+  // Bread & grains
+  "rye bread", "dark rye bread", "naan", "naan bread",
+  "pita", "pita bread", "basmati rice",
+  // Breakfast
+  "breakfast cereal",
+  // Protein & plant
+  "paneer", "halloumi", "edamame",
+  // Asian foods – clean
+  "miso", "miso paste", "kimchi", "coconut milk",
+  "rice noodles", "fish sauce", "chili oil",
+  // Asian foods – processed
+  "instant ramen", "ramen",
+  "teriyaki sauce", "bulgogi sauce", "gochujang",
+  "hoisin sauce", "oyster sauce", "curry sauce",
+  "dumpling", "frozen dumpling", "wonton", "spring roll",
+  "pad thai", "fried rice", "bibimbap",
+  "supermarket sushi",
+  // Fermented
+  "tapai", "tape",
+  // Additives (for search recognition)
+  "acesulfame k", "sorbitol",
 ];
 
 const brandSuggestionsByCategory: Record<string, string[]> = {
@@ -344,13 +367,13 @@ function getCategoryOverrideLevel(food: string): number | null {
   if (includesAny(text, level2Terms)) return 2;
 
   const level1FreshTerms = [
-    "fresh fruit", "fruit", "vegetable", "vegetables", "eggs", "egg", "plain nuts", "nuts",
+    "fresh fruit", "fruit", "vegetable", "vegetables", "plain nuts", "nuts",
     "apple", "banana", "kiwi", "orange", "grape", "strawberry", "watermelon",
     "carrot", "spinach", "broccoli", "tomato", "cucumber", "lettuce",
     "avocado", "plain popcorn", "almonds", "herring", "sill", "tofu",
     "havregryn",
   ];
-  if (includesAny(text, level1FreshTerms)) return 1;
+  if (includesAny(text, level1FreshTerms) || /\beggs?\b/.test(text)) return 1;
 
   const curedTerms = ["cured", "smoked", "deli", "bacon", "ham", "salami", "sausage"];
   const plainMeatFishTerms = ["plain meat", "plain fish", "fresh fish", "fresh meat", "raw fish", "raw meat"];
@@ -420,143 +443,73 @@ function formatReasonItem(value: string): string {
     .join(" ");
 }
 
-function getTypicalAdditives(food: string): string {
+function getStructuredAdditives(food: string): string[] {
   const text = normalizeText(food);
 
-  // Processed meats
   if (includesAny(text, ["falukorv"]))
-    return "Falukorv typically contains sodium nitrite (preservative), E450 (phosphates) and starch fillers not used in home cooking.";
+    return ["Sodium nitrite", "E450 (phosphates)", "Starch fillers"];
   if (includesAny(text, ["kottbullar", "köttbullar", "meatball", "meatballs"]))
-    return "Packaged meatballs typically contain E450 (phosphates), modified starch and flavour enhancers not used in home cooking.";
-  if (includesAny(text, ["korv strömming"]))
-    return "Korv strömming typically contains sodium nitrite, E471 (emulsifier) and modified starch not used in home cooking.";
+    return ["E450 (phosphates)", "Modified starch", "Flavour enhancers"];
   if (includesAny(text, ["sausage", "korv", "pepperoni", "bacon", "salami", "ham", "chorizo"]))
-    return "Cured meats like this typically contain sodium nitrite (preservative), E450 (phosphates) and artificial flavourings not used in home cooking.";
+    return ["Sodium nitrite", "E450 (phosphates)", "Artificial flavourings"];
   if (includesAny(text, ["deli turkey", "deli chicken"]))
-    return "Deli meats typically contain sodium nitrite (preservative), E450 (phosphates) and modified starch not used in home cooking.";
-
-  // Fast food / frozen
+    return ["Sodium nitrite", "E450 (phosphates)", "Modified starch"];
   if (includesAny(text, ["frozen pizza", "pizza"]))
-    return "Frozen pizza typically contains E471 (emulsifier), modified starch, glucose syrup and palm oil not used in home cooking.";
+    return ["E471 (emulsifier)", "Modified starch", "Palm oil"];
   if (includesAny(text, ["lasagna", "lasagne"]))
-    return "Frozen lasagna typically contains E471 (emulsifier), modified starch and flavour enhancers not used in home cooking.";
+    return ["E471 (emulsifier)", "Modified starch", "Flavour enhancers"];
   if (includesAny(text, ["ready meal", "frozen meal"]))
-    return "Ready meals typically contain E471 (emulsifier), E450 (phosphates), modified starch and flavour enhancers not used in home cooking.";
+    return ["E471 (emulsifier)", "E450 (phosphates)", "Modified starch"];
   if (includesAny(text, ["burger", "nuggets", "fried chicken"]))
-    return "Products like this typically contain E450 (phosphates), modified starch and artificial flavourings not used in home cooking.";
-  if (includesAny(text, ["falafel"]))
-    return "Packaged falafel typically contains modified starch, E450 (phosphates) and flavour enhancers not used in home cooking.";
-
-  // Snacks
+    return ["E450 (phosphates)", "Modified starch", "Artificial flavourings"];
   if (includesAny(text, ["chips", "crisps"]))
-    return "Crisps typically contain E621 (MSG), artificial flavourings and palm oil not used in home cooking.";
-  if (includesAny(text, ["flavoured popcorn", "popcorn"]))
-    return "Flavoured popcorn typically contains E621 (MSG), artificial flavourings and palm oil not used in home cooking.";
-  if (includesAny(text, ["crackers"]))
-    return "Crackers typically contain E471 (emulsifier), palm oil and glucose syrup not used in home cooking.";
+    return ["E621 (MSG)", "Artificial flavourings", "Palm oil"];
   if (includesAny(text, ["protein bar", "energy bar"]))
-    return "Protein bars typically contain maltodextrin, sucralose, artificial flavourings and E471 (emulsifier) not used in home cooking.";
-  if (includesAny(text, ["rice cakes"]))
-    return "Rice cakes typically contain modified starch and artificial flavourings not used in home cooking.";
-
-  // Sweet & candy
+    return ["Maltodextrin", "Sucralose", "Artificial flavourings"];
   if (includesAny(text, ["candy", "godis", "sweets"]))
-    return "Sweets typically contain glucose syrup, E471 (emulsifier) and artificial colours not used in home cooking.";
+    return ["Glucose syrup", "E471 (emulsifier)", "Artificial colours"];
   if (includesAny(text, ["milk chocolate"]))
-    return "Milk chocolate typically contains E476 (emulsifier), glucose syrup and artificial flavourings not used in home cooking.";
-  if (includesAny(text, ["granola bar", "cereal bar"]))
-    return "Cereal bars typically contain glucose syrup, palm oil and artificial flavourings not used in home cooking.";
+    return ["E476 (emulsifier)", "Glucose syrup", "Artificial flavourings"];
   if (includesAny(text, ["flavoured yogurt", "flavored yogurt"]))
-    return "Flavoured yogurts typically contain E471 (emulsifier), glucose syrup and artificial flavourings not used in home cooking.";
+    return ["E471 (emulsifier)", "Glucose syrup", "Artificial flavourings"];
   if (includesAny(text, ["ice cream"]))
-    return "Commercial ice cream typically contains E471 (emulsifier), E407 (carrageenan) and glucose syrup not used in home cooking.";
-
-  // Bread & grains
+    return ["E471 (emulsifier)", "E407 (carrageenan)", "Glucose syrup"];
   if (includesAny(text, ["bread", "brod", "bröd"]))
-    return "Supermarket bread typically contains E471 (emulsifier), calcium propionate (preservative) and modified starch not used in home cooking.";
+    return ["E471 (emulsifier)", "Calcium propionate", "Modified starch"];
   if (includesAny(text, ["cornflakes", "corn flakes", "breakfast cereal", "cereal"]))
-    return "Breakfast cereals typically contain glucose syrup, artificial flavourings and modified starch not used in home cooking.";
+    return ["Glucose syrup", "Artificial flavourings", "Modified starch"];
   if (includesAny(text, ["instant oats", "flavoured oats"]))
-    return "Flavoured instant oats typically contain glucose syrup, artificial flavourings and maltodextrin not used in home cooking.";
+    return ["Glucose syrup", "Artificial flavourings", "Maltodextrin"];
   if (includesAny(text, ["wrap", "tortilla"]))
-    return "Wraps and tortillas typically contain E471 (emulsifier), calcium propionate (preservative) and modified starch not used in home cooking.";
-  if (includesAny(text, ["pasta"]))
-    return "Fresh packaged pasta typically contains E471 (emulsifier) and modified starch not used in home cooking.";
-
-  // Drinks
+    return ["E471 (emulsifier)", "Calcium propionate", "Modified starch"];
   if (includesAny(text, ["soda", "energy drink", "läsk"]))
-    return "Soft drinks typically contain glucose syrup, E330 (citric acid) and artificial flavourings not used in home cooking.";
+    return ["Glucose syrup", "E330 (citric acid)", "Artificial flavourings"];
   if (includesAny(text, ["fruit juice"]))
-    return "Commercial fruit juice typically contains E330 (citric acid), glucose syrup and artificial flavourings not used in home cooking.";
-  if (includesAny(text, ["bottled smoothie", "smoothie"]))
-    return "Bottled smoothies typically contain E330 (citric acid), glucose syrup and artificial flavourings not used in home cooking.";
-  if (includesAny(text, ["sports drink"]))
-    return "Sports drinks typically contain glucose syrup, E330 (citric acid) and artificial colours not used in home cooking.";
-  if (includesAny(text, ["flavoured oat milk"]))
-    return "Flavoured oat milk typically contains E471 (emulsifier), glucose syrup and artificial flavourings not used in home cooking.";
-
-  // Sauces & condiments
+    return ["E330 (citric acid)", "Glucose syrup", "Artificial flavourings"];
+  if (includesAny(text, ["instant ramen", "ramen"]))
+    return ["E621 (MSG)", "Palm oil", "Modified starch"];
+  if (includesAny(text, ["teriyaki sauce"]))
+    return ["Glucose syrup", "Modified starch", "Artificial flavourings"];
   if (includesAny(text, ["ketchup"]))
-    return "Ketchup typically contains glucose syrup, E330 (citric acid) and modified starch not used in home cooking.";
+    return ["Glucose syrup", "E330 (citric acid)", "Modified starch"];
   if (includesAny(text, ["mayonnaise", "mayo"]))
-    return "Mayonnaise typically contains E471 (emulsifier), E330 (citric acid) and modified starch not used in home cooking.";
-  if (includesAny(text, ["bearnaise", "béarnaise"]))
-    return "Packaged béarnaise sauce typically contains E471 (emulsifier), modified starch and artificial flavourings not used in home cooking.";
-  if (includesAny(text, ["salad dressing", "dressing"]))
-    return "Salad dressings typically contain E471 (emulsifier), E330 (citric acid) and glucose syrup not used in home cooking.";
+    return ["E471 (emulsifier)", "E330 (citric acid)", "Modified starch"];
   if (includesAny(text, ["instant soup"]))
-    return "Instant soups typically contain E621 (MSG), modified starch and palm oil not used in home cooking.";
-  if (includesAny(text, ["pesto"]))
-    return "Store-bought pesto typically contains E330 (citric acid), palm oil and modified starch not used in home cooking.";
-  if (includesAny(text, ["hummus"]))
-    return "Packaged hummus typically contains E330 (citric acid), modified starch and preservatives not used in home cooking.";
+    return ["E621 (MSG)", "Modified starch", "Palm oil"];
+  if (includesAny(text, ["spring roll", "dumpling", "wonton"]))
+    return ["E450 (phosphates)", "Modified starch", "Artificial flavourings"];
+  if (includesAny(text, ["curry sauce"]))
+    return ["Modified starch", "Glucose syrup", "Artificial flavourings"];
+  if (includesAny(text, ["granola"]))
+    return ["Glucose syrup", "Palm oil", "Artificial flavourings"];
+  if (includesAny(text, ["oyster sauce"]))
+    return ["Modified starch", "Glucose syrup", "E330 (citric acid)"];
+  if (includesAny(text, ["hoisin sauce", "bulgogi sauce"]))
+    return ["Glucose syrup", "E330 (citric acid)", "Artificial flavourings"];
+  if (includesAny(text, ["sauce", "dressing"]))
+    return ["E471 (emulsifier)", "E330 (citric acid)", "Glucose syrup"];
 
-  // Swedish classics
-  if (includesAny(text, ["smörgåspålägg", "smorgas"]))
-    return "Packaged sandwich spreads typically contain E471 (emulsifier), sodium nitrite and modified starch not used in home cooking.";
-  if (includesAny(text, ["kaviar", "tube kaviar"]))
-    return "Tube kaviar typically contains E471 (emulsifier), modified starch and artificial flavourings not used in home cooking.";
-  if (includesAny(text, ["inlagd sill", "pickled herring"]))
-    return "Pickled herring typically contains E330 (citric acid), glucose syrup and preservatives not used in home cooking.";
-  if (includesAny(text, ["leverpostej", "liver pate", "liver pâté"]))
-    return "Leverpostej typically contains sodium nitrite, E471 (emulsifier) and modified starch not used in home cooking.";
-  if (includesAny(text, ["messmör"]))
-    return "Messmör typically contains modified starch, glucose syrup and artificial flavourings not used in home cooking.";
-
-  // Defaults
-  return "";
-}
-
-function buildDynamicReason(
-  food: string,
-  level: number,
-  harmfulIngredients: string[] | null,
-  additives: string[]
-): string | null {
-  if (level < 3) return null;
-
-  // If we have real harmful ingredients from OFF
-  if (harmfulIngredients && harmfulIngredients.length > 0) {
-    const list = harmfulIngredients.map(formatReasonItem).join(", ");
-    return `Contains ${list} — ingredients added industrially that you wouldn't use cooking at home.`;
-  }
-
-  // If we have real additives from OFF
-  if (additives.length > 0) {
-    const firstTwo = additives.slice(0, 2)
-      .map((item) => item.toUpperCase()).join(", ");
-    return `Contains ${additives.length} food additives including ${firstTwo} — preservatives and stabilisers not found in home cooking.`;
-  }
-
-  // No real OFF data — use category knowledge
-  const typical = getTypicalAdditives(food);
-  if (typical) return typical;
-
-  // Final fallbacks
-  if (level === 4) {
-    return "Ultra processed foods typically contain industrial emulsifiers, preservatives and flavour enhancers not used in home cooking.";
-  }
-  return "This product has been moderately processed with added preservatives and stabilisers beyond simple home cooking.";
+  return [];
 }
 
 function getBetterChoice(food: string, level: number): { text: string; adSlot: boolean } | null {
@@ -567,6 +520,13 @@ function getBetterChoice(food: string, level: number): { text: string; adSlot: b
   if (includesAny(text, ["sausage", "bacon", "salami", "ham", "chorizo", "pepperoni", "processed meat"])) {
     return {
       text: "Try fresh chicken breast or turkey mince instead - unprocessed meat with no additives or preservatives.",
+      adSlot: true,
+    };
+  }
+
+  if (includesAny(text, ["veggie burger", "veggie patty", "plant burger"])) {
+    return {
+      text: "Try Oumph! or Naturli — they have cleaner ingredient lists than most veggie burgers. Or make your own with chickpeas, oats and spices.",
       adSlot: true,
     };
   }
@@ -694,7 +654,7 @@ function getVerdictDescription(food: string, level: number): string {
     if (includesAny(text, ["carrot", "spinach", "broccoli", "tomato", "cucumber", "lettuce", "vegetable"])) {
       return "Eat as much as you want — the more the better";
     }
-    if (includesAny(text, ["eggs", "egg"])) {
+    if (/\beggs?\b/.test(text)) {
       return "A solid everyday protein source — nothing to worry about";
     }
     if (includesAny(text, ["salmon", "lax", "gravlax"])) {
@@ -766,6 +726,9 @@ function getVerdictDescription(food: string, level: number): string {
   if (includesAny(text, ["pizza", "frozen", "lasagna", "ready meal"])) {
     return "Fine for a lazy night — just not every night";
   }
+  if (includesAny(text, ["veggie burger", "veggie patty", "plant burger"])) {
+    return "Most plant-based burgers are just as processed as meat ones — check the label for a shorter ingredient list";
+  }
   if (includesAny(text, ["burger", "nuggets", "fried chicken"])) {
     return "A once-in-a-while meal — fun but not fuel";
   }
@@ -815,7 +778,11 @@ const funFacts: Array<{ keywords: string[]; fact: string }> = [
 function getFunFact(food: string): string | null {
   const normalized = normalizeText(food);
   for (const entry of funFacts) {
-    if (entry.keywords.some((k) => normalized.includes(normalizeText(k)))) {
+    if (entry.keywords.some((k) => {
+      const kn = normalizeText(k);
+      const regex = new RegExp(`(^|\\s)${kn}s?(\\s|$)`);
+      return regex.test(normalized);
+    })) {
       return entry.fact;
     }
   }
@@ -833,7 +800,6 @@ function buildResult(food: string, offProduct?: AnalyzeRequest["offProduct"]): A
       suggestedBrands: null,
       ingredients: null,
       harmfulIngredients: null,
-      reason: null,
       betterChoice: null,
       estimated: false,
       source: "estimated",
@@ -852,9 +818,26 @@ function buildResult(food: string, offProduct?: AnalyzeRequest["offProduct"]): A
 
   let harmfulIngredients: string[] | null = null;
   if (level >= 3) {
+    // Try real OFF data first
     const text = normalizeText(`${ingredients ?? ""} ${additives.join(" ")}`);
     const found = riskyMarkers.filter((m) => text.includes(m));
-    harmfulIngredients = found.length > 0 ? found : null;
+
+    if (found.length > 0) {
+      harmfulIngredients = found.map(formatReasonItem).slice(0, 3);
+    } else {
+      // Fall back to category-based structured list
+      const structured = getStructuredAdditives(food);
+      if (structured.length > 0) {
+        harmfulIngredients = structured;
+      } else {
+        // Always show something for level 3-4 even if we don't know the specific food
+        if (level === 4) {
+          harmfulIngredients = ["Industrial emulsifiers", "Artificial preservatives", "Flavour enhancers"];
+        } else {
+          harmfulIngredients = ["Added preservatives", "Stabilisers", "Modified ingredients"];
+        }
+      }
+    }
   }
 
   return {
@@ -866,7 +849,6 @@ function buildResult(food: string, offProduct?: AnalyzeRequest["offProduct"]): A
     suggestedBrands: brandFields.suggestedBrands,
     ingredients: level === 1 ? null : ingredients,
     harmfulIngredients,
-    reason: buildDynamicReason(food, level, harmfulIngredients, additives),
     betterChoice: getBetterChoice(food, level),
     estimated,
     source: offProduct ? "openfoodfacts" : "estimated",

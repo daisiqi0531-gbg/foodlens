@@ -1,5 +1,5 @@
 "use client";
-import { IngredientBullets } from "./IngredientBullets";
+import { IngredientBullets } from "./IngredientDetail";
 
 export interface AnalyzeResult {
   level: number;
@@ -10,7 +10,6 @@ export interface AnalyzeResult {
   suggestedBrands: string[] | null;
   ingredients: string | null;
   harmfulIngredients: string[] | null;
-  reason: string | null;
   betterChoice: { text: string; adSlot: boolean } | null;
   estimated: boolean;
   source: "openfoodfacts" | "estimated";
@@ -74,7 +73,7 @@ export function ResultCard({ result }: ResultCardProps) {
         </p>
 
         {result.funFact && (
-          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed italic">
+          <p className="mt-3 mb-1 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
             💡 {result.funFact}
           </p>
         )}
@@ -129,22 +128,23 @@ export function ResultCard({ result }: ResultCardProps) {
           <p className="text-sm font-semibold text-gray-900 dark:text-white">Ingredients</p>
           <p className="mt-1 text-sm text-gray-700 dark:text-gray-200">{result.ingredients}</p>
 
-          {result.level >= 3 && result.harmfulIngredients && result.harmfulIngredients.length > 0 && (
-            <p className="mt-2 text-sm font-medium text-amber-700 dark:text-amber-200">
-              ⚠️ Potentially harmful: {result.harmfulIngredients.join(", ")}
-            </p>
-          )}
+
         </div>
       )}
 
       {/* Reason Section */}
-      {result.level >= 3 && result.reason && (
+      {result.level >= 3 && result.harmfulIngredients && result.harmfulIngredients.length > 0 && (
         <div className="mt-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300">Why?</p>
-          <IngredientBullets text={result.reason ?? ""} />
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300 mb-2">
+            Why?
+          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+            Potentially harmful ingredients:
+          </p>
+          <IngredientBullets items={result.harmfulIngredients} />
           <a
             href="/ingredients"
-            className="mt-2 inline-block text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            className="mt-3 inline-block text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
             Understand these ingredients →
           </a>
