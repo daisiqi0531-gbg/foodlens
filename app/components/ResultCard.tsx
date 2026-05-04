@@ -13,6 +13,9 @@ export interface AnalyzeResult {
   betterChoice: { text: string; adSlot: boolean } | null;
   estimated: boolean;
   source: "openfoodfacts" | "estimated";
+  verdictLabel: string;
+  verdictDescription: string;
+  funFact: string | null;
   notFound: boolean;
 }
 
@@ -23,6 +26,24 @@ interface ResultCardProps {
 export function ResultCard({ result }: ResultCardProps) {
   const verdictEmoji =
     result.level === 1 ? "🌱" : result.level === 2 ? "😊" : result.level === 3 ? "🤔" : "🫣";
+
+  const levelBg =
+    result.level === 1
+      ? "bg-green-50 dark:bg-green-950/50"
+      : result.level === 2
+        ? "bg-lime-50 dark:bg-lime-950/50"
+        : result.level === 3
+          ? "bg-orange-50 dark:bg-orange-950/50"
+          : "bg-red-50 dark:bg-red-950/50";
+
+  const levelText =
+    result.level === 1
+      ? "text-green-600 dark:text-green-400"
+      : result.level === 2
+        ? "text-lime-600 dark:text-lime-400"
+        : result.level === 3
+          ? "text-orange-600 dark:text-orange-400"
+          : "text-red-600 dark:text-red-400";
 
   if (result.notFound) {
     return (
@@ -40,39 +61,37 @@ export function ResultCard({ result }: ResultCardProps) {
 
   return (
     <div className="max-w-md mx-auto mt-4 p-4 md:p-6 bg-white dark:bg-gray-900/80 rounded-xl shadow-lg border border-transparent dark:border-gray-700">
-      {/* NOVA Level Badge (always show) */}
-      <div
-        className={`mb-4 rounded-xl p-4 ${
-          result.level === 1
-            ? "bg-green-50 dark:bg-green-950/70"
-            : result.level === 2
-              ? "bg-lime-50 dark:bg-lime-950/70"
-              : result.level === 3
-                ? "bg-orange-50 dark:bg-orange-950/70"
-                : "bg-red-50 dark:bg-red-950/70"
-        }`}
-      >
-        <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-300">NOVA level</p>
-        <div className="mt-1 flex items-end gap-2">
-          <span
-            className={`text-4xl font-bold leading-none ${
-              result.level === 1
-                ? "text-green-600 dark:text-green-400"
-                : result.level === 2
-                  ? "text-lime-600 dark:text-lime-400"
-                  : result.level === 3
-                    ? "text-orange-600 dark:text-orange-400"
-                    : "text-red-600 dark:text-red-400"
-            }`}
-          >
+      {/* Combined Verdict + NOVA block */}
+      <div className={`mb-4 rounded-xl p-4 ${levelBg}`}>
+        {/* Verdict — prominent at top */}
+        <p className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+          <span className="mr-2">{verdictEmoji}</span>
+          {result.verdictLabel}
+        </p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+          {result.verdictDescription}
+        </p>
+
+        {result.funFact && (
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400 leading-relaxed italic">
+            💡 {result.funFact}
+          </p>
+        )}
+
+        {/* Divider */}
+        <div className="border-t border-black/10 dark:border-white/10 mb-3" />
+
+        {/* Process level — supporting detail below */}
+        <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">
+          Process level
+        </p>
+        <div className="flex items-center gap-2">
+          <span className={`text-3xl font-bold leading-none ${levelText}`}>
             {result.level}
           </span>
-          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">{result.levelName}</span>
-        </div>
-
-        <div className="mt-2 flex items-center gap-2">
-          <span className="text-2xl leading-none flex-shrink-0">{verdictEmoji}</span>
-          <span className="text-sm font-normal text-gray-700 dark:text-gray-100">{result.verdict}</span>
+          <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+            {result.levelName}
+          </span>
         </div>
       </div>
 
@@ -122,6 +141,12 @@ export function ResultCard({ result }: ResultCardProps) {
         <div className="mt-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300">Why?</p>
           <p className="mt-1 text-sm text-gray-800 dark:text-gray-100">{result.reason}</p>
+          <a
+            href="/ingredients"
+            className="mt-2 inline-block text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          >
+            Understand these ingredients →
+          </a>
         </div>
       )}
 

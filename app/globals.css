@@ -24,6 +24,12 @@ body {
   min-height: 100vh;
 }
 
+/* Remove focus outlines globally */
+*:focus,
+*:focus-visible {
+  outline: none;
+}
+
 /* Form Elements */
 input {
   font-family: inherit;
@@ -42,8 +48,7 @@ button:disabled {
 /* Focus States */
 input:focus,
 button:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
+  outline: none;
 }
 
 /* Animations */
@@ -83,3 +88,12 @@ button:focus {
   }
 }
 
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

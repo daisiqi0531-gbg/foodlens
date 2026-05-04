@@ -2,6 +2,39 @@
 import { useEffect, useState, useRef } from "react";
 import { ResultCard, type AnalyzeResult } from "./components/ResultCard";
 
+const didYouKnowData = {
+  better: [
+    { emoji: "🧈", food: "Butter", query: "butter", surprise: "People think it's bad", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🥚", food: "Eggs", query: "eggs", surprise: "People worry about cholesterol", label: "🌱 Level 1 — As clean as it gets" },
+    { emoji: "🫙", food: "Plain yogurt", query: "plain yogurt", surprise: "Seems like a processed product", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🧀", food: "Real cheese", query: "cheese", surprise: "Seems unhealthy", label: "🤔 Level 3 — Occasionally" },
+    { emoji: "🥑", food: "Avocado", query: "avocado", surprise: "People think it's too fatty", label: "🌱 Level 1 — As clean as it gets" },
+    { emoji: "🍫", food: "Dark chocolate", query: "dark chocolate", surprise: "Chocolate must be bad", label: "🤔 Level 3 — Occasionally" },
+    { emoji: "🥛", food: "Filmjölk", query: "filmjolk", surprise: "Dairy gets a bad rep", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🍯", food: "Honey", query: "honey", surprise: "It's basically sugar", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🐟", food: "Sardines", query: "sardines", surprise: "Canned fish seems processed", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🥦", food: "Frozen veg", query: "frozen vegetables", surprise: "Fresh is always better, right?", label: "😊 Level 2 — Everyday ingredient" },
+  ],
+  worse: [
+    { emoji: "🍓", food: "Flavoured yogurt", query: "flavoured yogurt", surprise: "It's yogurt, it's healthy", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🧃", food: "Fruit juice", query: "fruit juice", surprise: "It's just fruit", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🥣", food: "Granola", query: "granola", surprise: "Healthy breakfast choice", label: "🤔 Level 3 — Occasionally" },
+    { emoji: "💪", food: "Protein bar", query: "protein bar", surprise: "High protein = healthy", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🥛", food: "Oat milk", query: "oat milk", surprise: "Plant-based = good", label: "🤔 Level 3 — Occasionally" },
+    { emoji: "🦃", food: "Deli turkey", query: "deli turkey", surprise: "It's just chicken", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🌱", food: "Veggie burger", query: "veggie burger", surprise: "Plant-based = healthy", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🎑", food: "Rice cakes", query: "rice cakes", surprise: "Light diet food", label: "🤔 Level 3 — Occasionally" },
+    { emoji: "🥤", food: "Smoothie (bottled)", query: "bottled smoothie", surprise: "It's just fruit", label: "🤔 Level 3 — Occasionally" },
+    { emoji: "🥜", food: "Flavoured nuts", query: "flavoured nuts", surprise: "Nuts are healthy", label: "🤔 Level 3 — Occasionally" },
+  ]
+};
+
+function pickRandom<T>(arr: T[], count: number): T[] {
+  return [...arr]
+    .sort(() => Math.random() - 0.5)
+    .slice(0, count);
+}
+
 const LogoSpinner = ({ size = 24 }: { size?: number }) => {
   const [currentFrame, setCurrentFrame] = useState(1);
   const [nextFrame, setNextFrame] = useState(2);
@@ -82,11 +115,23 @@ export default function Home() {
   const [filtered, setFiltered] = useState<string[]>([]);
   const [toast, setToast] = useState<string | null>(null);
   const [showNovaInfo, setShowNovaInfo] = useState(false);
+  const [didYouKnowTab, setDidYouKnowTab] = useState<"better" | "worse">("better");
+  const [randomCards, setRandomCards] = useState<{
+    better: typeof didYouKnowData.better;
+    worse: typeof didYouKnowData.worse;
+  }>({ better: [], worse: [] });
   const debounceRef = useRef<any>(null);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    setRandomCards({
+      better: pickRandom(didYouKnowData.better, 3),
+      worse: pickRandom(didYouKnowData.worse, 3),
+    });
+  }, [result]);
 
   const showToast = (message: string) => {
     setToast(message);
@@ -245,7 +290,7 @@ export default function Home() {
                     analyzeFood();
                   }
                 }}
-                className="w-full px-3 py-2 md:px-4 md:py-3 pr-10 text-base md:text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
+                className="w-full px-3 py-2 md:px-4 md:py-3 pr-10 text-base md:text-lg rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 dark:focus:ring-green-500 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
               />
               
               {/* Clear button */}
@@ -345,6 +390,50 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          <div className="w-full max-w-md mt-6">
+            <p className="text-xs text-gray-400 text-center mb-3">Did you know?</p>
+            <div className="flex gap-2 mb-3 justify-center">
+              <button
+                onClick={() => setDidYouKnowTab("better")}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors outline-none focus:outline-none focus-visible:outline-none ${
+                  didYouKnowTab === "better"
+                    ? "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 hover:bg-green-200 dark:hover:bg-green-800 active:bg-green-300 dark:active:bg-green-700"
+                    : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 active:bg-gray-100 dark:active:bg-gray-600"
+                }`}
+              >
+                😮 Better than you think
+              </button>
+              <button
+                onClick={() => setDidYouKnowTab("worse")}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors outline-none focus:outline-none focus-visible:outline-none ${
+                  didYouKnowTab === "worse"
+                    ? "bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 hover:bg-orange-200 dark:hover:bg-orange-800 active:bg-orange-300 dark:active:bg-orange-700"
+                    : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 active:bg-gray-100 dark:active:bg-gray-600"
+                }`}
+              >
+                😬 Worse than you think
+              </button>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
+              {randomCards[didYouKnowTab].length > 0 &&
+              randomCards[didYouKnowTab].map((item) => (
+                <button
+                  key={item.query}
+                  onClick={() => {
+                    setFood(item.query);
+                    analyzeFood(item.query);
+                  }}
+                  className="flex-shrink-0 w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-3 text-left hover:border-gray-400 dark:hover:border-gray-500 transition-colors cursor-pointer"
+                >
+                  <p className="text-2xl mb-2">{item.emoji}</p>
+                  <p className="text-xs font-semibold text-gray-900 dark:text-white mb-1 leading-tight">{item.food}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2 leading-tight italic">{item.surprise}</p>
+                  <p className="text-xs font-medium text-gray-700 dark:text-gray-300 leading-tight">{item.label}</p>
+                </button>
+              ))}
+            </div>
+          </div>
           </>
         )}
 
@@ -433,25 +522,33 @@ export default function Home() {
       )}
 
       {/* Footer */}
-      <footer className="w-full max-w-md mt-auto pt-8 pb-6 text-center border-t border-gray-200 dark:border-gray-700">
-        <p className="text-xs text-gray-400 leading-relaxed mb-4">
-          FoodLens provides general food information based on the NOVA classification system. Results are for informational purposes only and do not constitute medical, nutritional, or dietary advice. Always consult a qualified health professional before making changes to your diet.
-        </p>
-        <div className="flex justify-center gap-4">
-          <a
-            href="/privacy"
-            className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-          >
-            Privacy Policy
-          </a>
-          <button
-            onClick={() => setShowNovaInfo(true)}
-            className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-          >
-            What is NOVA classification?
-          </button>
-        </div>
-      </footer>
+      {!result && (
+        <footer className="w-full max-w-md mt-auto pt-8 pb-6 text-center border-t border-gray-200 dark:border-gray-700">
+          <p className="text-xs text-gray-400 leading-relaxed mb-4">
+            FoodLens is for information only — not medical or dietary advice.
+          </p>
+          <div className="flex justify-center gap-4 flex-wrap">
+            <a
+              href="/privacy"
+              className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            >
+              Privacy Policy
+            </a>
+            <a
+              href="/ingredients"
+              className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            >
+              Ingredient Dictionary
+            </a>
+            <button
+              onClick={() => setShowNovaInfo(true)}
+              className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            >
+              What is NOVA classification?
+            </button>
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
