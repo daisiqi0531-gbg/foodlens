@@ -155,12 +155,17 @@ export function ResultCard({ result }: ResultCardProps) {
       {result.level >= 3 && result.betterChoice && (
         <div className="mt-4 rounded-lg bg-green-50 p-3 dark:bg-green-800/30">
           <p className="text-sm text-gray-800 dark:text-gray-100">💚 Better choice: {result.betterChoice.text}</p>
-          <div
-            id="ad-slot-better-choice"
-            className="mt-3 rounded border border-dashed border-gray-200 p-2 text-center dark:border-gray-700/50"
-          >
-            <p className="text-xs text-gray-300 dark:text-gray-600">Sponsored</p>
-          </div>
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-3240793114742105"
+            data-ad-slot="YOUR_AD_SLOT_ID"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+          <script
+            dangerouslySetInnerHTML={{ __html: "(adsbygoogle = window.adsbygoogle || []).push({});" }}
+          />
         </div>
       )}
 
