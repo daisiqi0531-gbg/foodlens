@@ -93,6 +93,7 @@ const commonFoods = [
   "teriyaki sauce", "bulgogi sauce", "gochujang",
   "hoisin sauce", "oyster sauce", "curry sauce",
   "dumpling", "frozen dumpling", "wonton", "spring roll",
+  "kimchi",
   "pad thai", "fried rice", "bibimbap",
   "supermarket sushi",
   // Fermented
@@ -332,6 +333,9 @@ function getCategoryOverrideLevel(food: string): number | null {
   if (text.includes("dark chocolate")) return 3;
   if (text.includes("chocolate") || text.includes("milk chocolate")) return 4;
 
+  // Level-2 specifics that must be caught before broader level-3/4 term checks
+  if (includesAny(text, ["kimchi", "fish sauce", "plain cheese"])) return 2;
+
   const level4Terms = [
     "sausage", "hot dog", "bacon", "salami", "ham", "chorizo", "pepperoni", "meatball",
     "burger", "nuggets", "fried chicken",
@@ -342,6 +346,7 @@ function getCategoryOverrideLevel(food: string): number | null {
     "veggie burger", "fruit juice", "flavoured yogurt",
     "flavored yogurt", "energy bar",
     "falukorv",
+    "ramen", "teriyaki", "dumpling",
   ];
 
   if (includesAny(text, level4Terms)) return 4;
@@ -353,11 +358,12 @@ function getCategoryOverrideLevel(food: string): number | null {
     "flavoured nuts", "flavored nuts", "coleslaw",
     "frozen meal", "instant oats",
     "kottbullar", "köttbullar", "meatballs",
+    "cheese", "ost",
   ];
   if (includesAny(text, level3Terms)) return 3;
 
   const level2Terms = [
-    "plain yogurt", "plain yoghurt", "plain cheese", "plain butter", "plain cream", "plain milk", "plain oats",
+    "plain yogurt", "plain yoghurt", "plain butter", "plain cream", "plain milk", "plain oats",
     "filmjolk", "filmjölk", "kvarg", "skyr",
     "knackebrod", "knäckebröd", "wasa", "leksands",
     "frozen vegetables", "frozen veg",
