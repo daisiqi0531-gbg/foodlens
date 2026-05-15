@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
+type Lang = "sv" | "en";
+
 interface AnalyzeRequest {
   food: string;
+  lang?: Lang;
   offProduct?: {
     nova_group?: number;
     ingredients_text?: string;
@@ -31,11 +34,19 @@ interface AnalyzeResult {
   notFound: boolean;
 }
 
-const levelNames: Record<number, string> = {
-  1: "Minimally processed",
-  2: "Basic culinary ingredients",
-  3: "Moderately processed",
-  4: "Ultra processed",
+const levelNamesMap: Record<Lang, Record<number, string>> = {
+  sv: {
+    1: "Minimalt bearbetad",
+    2: "Basingredienser",
+    3: "Måttligt processad",
+    4: "Ultraprocessad",
+  },
+  en: {
+    1: "Minimally processed",
+    2: "Basic ingredients",
+    3: "Moderately processed",
+    4: "Ultra-processed",
+  },
 };
 
 const freshWholeFoodKeywords = [
@@ -518,270 +529,370 @@ function getStructuredAdditives(food: string): string[] {
   return [];
 }
 
-function getBetterChoice(food: string, level: number): { text: string; adSlot: boolean } | null {
+function getBetterChoice(food: string, level: number, lang: Lang): { text: string; adSlot: boolean } | null {
   if (level < 3) return null;
 
   const text = normalizeText(food);
 
+  if (lang === "en") {
+    if (includesAny(text, ["sausage", "bacon", "salami", "ham", "chorizo", "pepperoni", "processed meat"])) {
+      return { text: "Try chicken breast or lean mince instead — unprocessed meat with no additives or preservatives.", adSlot: true };
+    }
+    if (includesAny(text, ["veggie burger", "veggie patty", "plant burger"])) {
+      return { text: "Try Oumph! or Naturli — they have cleaner ingredient lists than most veggie burgers. Or make your own with chickpeas, oats and spices.", adSlot: true };
+    }
+    if (includesAny(text, ["burger", "nuggets", "fried chicken"])) {
+      return { text: "Make your own burgers with lean mince, or try Oumph! or Naturli for a cleaner plant-based option.", adSlot: true };
+    }
+    if (includesAny(text, ["pizza", "frozen", "ready meal", "lasagna"])) {
+      return { text: "Try making your own pizza with a wholegrain base, or look for Sigrid's Kitchen or cleaner frozen options.", adSlot: true };
+    }
+    if (includesAny(text, ["chips", "crisps"])) {
+      return { text: "Swap for rice cakes, unsalted nuts or plain popcorn without added flavourings.", adSlot: true };
+    }
+    if (includesAny(text, ["candy", "chocolate"])) {
+      return { text: "Try dark chocolate 70%+ (Fazer Dark or Marabou Dark) or a small handful of dried fruit and nuts.", adSlot: true };
+    }
+    if (includesAny(text, ["soda", "energy drink"])) {
+      return { text: "Swap for sparkling water with fresh lemon, or Ramlösa flavoured water with no added sugar.", adSlot: true };
+    }
+    if (includesAny(text, ["bread"])) {
+      return { text: "Look for sourdough or rye bread with 5 or fewer ingredients — Polarbröd Råg or bakery sourdough are solid options.", adSlot: true };
+    }
+    if (includesAny(text, ["cornflakes", "corn flakes", "cereal", "granola", "muesli"])) {
+      return { text: "Try plain oats or unsweetened muesli — look for options with no added sugar. Axa or ICA Ekologisk are good starting points.", adSlot: true };
+    }
+    if (includesAny(text, ["sauce", "dressing"])) {
+      return { text: "Make your own dressing with olive oil, lemon and herbs — or check the label for options with no added sugar.", adSlot: true };
+    }
+    if (includesAny(text, ["instant noodles", "noodles", "pasta"])) {
+      return { text: "Try wholegrain pasta with homemade tomato sauce, or Banza chickpea pasta for more nutrition.", adSlot: true };
+    }
+    if (includesAny(text, ["falukorv"])) {
+      return { text: "Try plain chicken breast or homemade meatballs — same satisfying meal with far fewer additives.", adSlot: true };
+    }
+    if (includesAny(text, ["kottbullar", "köttbullar", "meatballs"])) {
+      return { text: "Homemade meatballs take 20 minutes and have 5 ingredients — mince, egg, onion, breadcrumbs, salt. Far cleaner than shop-bought.", adSlot: true };
+    }
+    if (level === 4) {
+      return { text: "Look for a whole food alternative with 5 or fewer ingredients, and no E-numbers on the label.", adSlot: true };
+    }
+    return { text: "Check the ingredient list for a version with fewer additives — or try making a homemade version.", adSlot: true };
+  }
+
   if (includesAny(text, ["sausage", "bacon", "salami", "ham", "chorizo", "pepperoni", "processed meat"])) {
     return {
-      text: "Try fresh chicken breast or turkey mince instead - unprocessed meat with no additives or preservatives.",
+      text: "Prova kycklingbröst eller nötfärs istället — obearbetat kött utan tillsatser eller konserveringsmedel.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["veggie burger", "veggie patty", "plant burger"])) {
     return {
-      text: "Try Oumph! or Naturli — they have cleaner ingredient lists than most veggie burgers. Or make your own with chickpeas, oats and spices.",
+      text: "Prova Oumph! eller Naturli — de har renare ingredienslistor än de flesta vegoburgare. Eller gör dina egna med kikärtor, havregryn och kryddor.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["burger", "nuggets", "fried chicken"])) {
     return {
-      text: "Make your own burgers with lean beef mince, or try Oumph! or Naturli for a cleaner plant-based option.",
+      text: "Gör dina egna burgare med nötfärs, eller prova Oumph! eller Naturli för ett renare växtbaserat alternativ.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["pizza", "frozen", "ready meal", "lasagna"])) {
     return {
-      text: "Try making your own pizza with a wholegrain base, or look for Sigrid's Kitchen or clean-label frozen options.",
+      text: "Prova att göra din egen pizza med en fullkornsbotten, eller leta efter Sigrid's Kitchen eller renare frysta alternativ.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["chips", "crisps"])) {
     return {
-      text: "Swap for plain rice cakes, unsalted nuts, or air-popped popcorn with no added flavourings.",
+      text: "Byt mot riskex, osaltade nötter eller popcorn utan tillsatta smakämnen.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["candy", "chocolate"])) {
     return {
-      text: "Try dark chocolate 70%+ (Fazer Dark or Marabou Dark) or a small handful of dried fruit and nuts.",
+      text: "Prova mörk choklad 70%+ (Fazer Dark eller Marabou Dark) eller en liten handful torkad frukt och nötter.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["soda", "energy drink"])) {
     return {
-      text: "Swap for sparkling water with fresh lemon, or Ramlosa flavoured water with no added sugar.",
+      text: "Byt mot kolsyrat vatten med färsk citron, eller Ramlösa smaksatt vatten utan tillsatt socker.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["bread"])) {
     return {
-      text: "Look for sourdough or rye bread with 5 ingredients or fewer - Polarbrod Rag or bakery sourdough are good options.",
+      text: "Leta efter surdegsböd eller rågbröd med 5 ingredienser eller färre — Polarböd Råg eller bagerisurdeg är bra alternativ.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["cornflakes", "corn flakes", "cereal", "granola", "muesli"])) {
     return {
-      text: "Try plain oats or unsweetened muesli — look for options with no added sugar or flavourings. Lindahls or ICA Ekologisk are good starting points.",
+      text: "Prova vanliga havregryn eller osötat müsli — leta efter alternativ utan tillsatt socker. Axa eller ICA Ekologisk är bra startpunkter.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["sauce", "dressing"])) {
     return {
-      text: "Make your own dressing with olive oil, lemon and herbs - or check labels for options without added sugar.",
+      text: "Gör din egen dressing med olivolja, citron och örter — eller kolla etiketten för alternativ utan tillsatt socker.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["instant noodles", "noodles", "pasta"])) {
     return {
-      text: "Try whole grain pasta with homemade tomato sauce, or Banza chickpea pasta for more nutrients.",
+      text: "Prova fullkornspasta med hemgjord tomatsås, eller Banza kikärtspasta för mer näring.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["falukorv"])) {
     return {
-      text: "Try plain chicken breast or homemade köttbullar — same satisfying meal with far fewer additives.",
+      text: "Prova vanligt kycklingbröst eller hemgjorda köttbullar — samma tillfredsställande måltid med mycket färre tillsatser.",
       adSlot: true,
     };
   }
 
   if (includesAny(text, ["kottbullar", "köttbullar", "meatballs"])) {
     return {
-      text: "Homemade köttbullar take 20 minutes and have 5 ingredients — beef mince, egg, onion, breadcrumbs, salt. Much cleaner than packaged.",
+      text: "Hemgjorda köttbullar tar 20 minuter och har 5 ingredienser — nötfärs, ägg, lök, ströbröd, salt. Mycket renare än färdigköpta.",
       adSlot: true,
     };
   }
 
   if (level === 4) {
     return {
-      text: "Look for a whole food alternative with 5 ingredients or fewer, and no E-numbers on the label.",
+      text: "Leta efter ett helfodsalternativ med 5 ingredienser eller färre, och inga E-nummer på etiketten.",
       adSlot: true,
     };
   }
 
   return {
-    text: "Check the ingredient list for a version with fewer additives - or try making a homemade version.",
+    text: "Kolla ingredienslistan efter en version med färre tillsatser — eller prova att göra en hemgjord version.",
     adSlot: true,
   };
 }
 
-function getVerdict(level: number): string {
+function getVerdict(level: number, lang: Lang): string {
+  if (lang === "en") {
+    if (level === 1) return "This is real food with minimal processing — an excellent choice as part of a balanced diet.";
+    if (level === 2) return "This is lightly processed and generally fine to eat regularly.";
+    if (level === 3) return "This product is moderately processed — fine occasionally, but worth checking the ingredients.";
+    return "This is ultra-processed — enjoy rarely and in small amounts.";
+  }
   if (level === 1) {
-    return "This is a whole food with minimal processing — a great choice as part of a balanced diet.";
+    return "Det här är riktig mat med minimal bearbetning — ett utmärkt val som en del av en balanserad kost.";
   }
 
   if (level === 2) {
-    return "This is lightly processed and generally fine to include regularly in your diet.";
+    return "Det här är lätt bearbetat och generellt bra att äta regelbundet.";
   }
 
   if (level === 3) {
-    return "This product is moderately processed — fine occasionally, but worth checking the ingredients.";
+    return "Den här produkten är måttligt bearbetad — bra ibland, men värt att kolla ingredienserna.";
   }
 
-  return "This is ultra processed — best enjoyed rarely and in small amounts.";
+  return "Det här är ultraprocessat — njut sällan och i små mängder.";
 }
 
-function getVerdictLabel(level: number): string {
-  if (level === 1) return "As clean as it gets";
-  if (level === 2) return "Everyday ingredient";
-  if (level === 3) return "Occasionally";
-  return "Keep as a treat";
+function getVerdictLabel(level: number, lang: Lang): string {
+  if (lang === "en") {
+    if (level === 1) return "As clean as it gets";
+    if (level === 2) return "Everyday food";
+    if (level === 3) return "Now and then";
+    return "A treat";
+  }
+  if (level === 1) return "Så rent som det blir";
+  if (level === 2) return "Vardagsmat";
+  if (level === 3) return "Ibland";
+  return "En njutning";
 }
 
-function getVerdictDescription(food: string, level: number): string {
+function getVerdictDescription(food: string, level: number, lang: Lang): string {
   const text = normalizeText(food);
+
+  if (lang === "en") {
+    if (level === 1) {
+      if (includesAny(text, ["fruit", "banana", "apple", "kiwi", "orange", "grape", "strawberry", "watermelon"])) {
+        return "A perfect daily snack — grab it without a second thought";
+      }
+      if (includesAny(text, ["carrot", "spinach", "broccoli", "tomato", "cucumber", "lettuce", "vegetable"])) {
+        return "Eat as much as you like — the more the better";
+      }
+      if (/\beggs?\b/.test(text)) return "A solid daily protein source — nothing to worry about";
+      if (includesAny(text, ["salmon", "lax", "gravlax"])) return "An excellent everyday protein — one of the best fish choices";
+      if (includesAny(text, ["havregryn", "oats", "oatmeal"])) return "One of the best breakfast choices you can make — keeps you full for hours and has just one ingredient";
+      return "Minimal processing, no additives — eat it as often as you like";
+    }
+    if (level === 2) {
+      if (includesAny(text, ["olive oil", "butter", "cream"])) return "Use it in cooking every day — it's just a base ingredient, nothing added";
+      if (includesAny(text, ["kvarg", "skyr"])) return "An excellent daily protein snack — just strained milk, nothing added";
+      if (includesAny(text, ["yogurt", "yoghurt", "filmjolk", "milk", "filmjölk"])) return "A solid everyday choice — perfect at breakfast or as a snack";
+      if (includesAny(text, ["knackebrod", "knäckebröd", "wasa", "leksands", "crispbread"])) return "A Swedish kitchen staple — go for ones with just rye, water and salt for the cleanest option";
+      return "A simple, lightly processed ingredient — fine to eat every day without thinking about it";
+    }
+    if (level === 3) {
+      if (includesAny(text, ["bread", "brod", "bröd"])) return "Most people eat bread every day and that's fine — just look for versions with fewer than 5 ingredients";
+      if (includesAny(text, ["cornflakes", "corn flakes", "cereal", "granola", "muesli"])) return "Fine occasionally but not the best daily breakfast — high sugar versions leave you hungry again soon";
+      if (includesAny(text, ["cheese", "ost"])) return "Perfect on sandwiches or in cooking — just not the whole block at once";
+      if (includesAny(text, ["kottbullar", "köttbullar", "meatball", "meatballs"])) return "Shop-bought: level 3\u20134 / Homemade: level 2 — if you have 20 minutes, homemade is always the better choice";
+      if (includesAny(text, ["pasta", "rice cakes"])) return "A reliable dinner base — just watch the portion size and add some vegetables";
+      if (includesAny(text, ["kanelbulle", "semla"])) return "A Swedish classic — enjoy it for the treat it is, not as an everyday snack";
+      if (includesAny(text, ["sauce", "dressing"])) return "Use it for flavour — just check the label, many sauces hide surprising amounts of sugar";
+      return "Worth eating less often than whole foods — but no reason to stress if it's part of a varied diet";
+    }
+    // level 4
+    if (includesAny(text, ["falukorv"])) return "A Swedish classic but heavily processed — fine occasionally, not every day";
+    if (includesAny(text, ["sausage", "korv", "bacon", "salami", "ham", "chorizo", "pepperoni"])) return "Best saved for the weekend — high in preservatives and salt";
+    if (includesAny(text, ["chips", "crisps"])) return "Perfect for movie nights — just don't make it your daily afternoon snack";
+    if (includesAny(text, ["candy", "chocolate", "godis"])) return "It's a treat — enjoy it and don't overthink it, just not every day";
+    if (includesAny(text, ["soda", "energy drink", "läsk"])) return "Worth swapping for water or sparkling water most of the time";
+    if (includesAny(text, ["pizza", "frozen", "lasagna", "ready meal"])) return "Fine for a lazy night — just not every night";
+    if (includesAny(text, ["veggie burger", "veggie patty", "plant burger"])) return "Most plant-based burgers are just as processed as meat ones — check the label for a shorter ingredient list";
+    if (includesAny(text, ["burger", "nuggets", "fried chicken"])) return "A meal to enjoy occasionally — fun but not fuel";
+    return "This is heavily processed — fun to enjoy occasionally but your body will thank you for not making it a habit";
+  }
 
   if (level === 1) {
     if (includesAny(text, ["fruit", "banana", "apple", "kiwi", "orange", "grape", "strawberry", "watermelon"])) {
-      return "A perfect everyday snack — grab it without thinking";
+      return "En perfekt snack varje dag — ta den utan att tveka";
     }
     if (includesAny(text, ["carrot", "spinach", "broccoli", "tomato", "cucumber", "lettuce", "vegetable"])) {
-      return "Eat as much as you want — the more the better";
+      return "Ät hur mycket du vill — ju mer desto bättre";
     }
     if (/\beggs?\b/.test(text)) {
-      return "A solid everyday protein source — nothing to worry about";
+      return "En solid proteinkälla varje dag — inget att oroa sig för";
     }
     if (includesAny(text, ["salmon", "lax", "gravlax"])) {
-      return "An excellent everyday protein — one of the best fish choices";
+      return "Ett utmärkt vardagsprotein — ett av de bästa fiskvalen";
     }
     if (includesAny(text, ["havregryn", "oats", "oatmeal"])) {
-      return "One of the best breakfast choices you can make — keeps you full for hours and has just one ingredient";
+      return "Ett av de bästa frukostval du kan göra — håller dig mätt i timmar och har bara en ingrediens";
     }
-    return "Minimal processing, no additives — eat it as often as you like";
+    return "Minimal bearbetning, inga tillsatser — ät det så ofta du vill";
   }
 
   if (level === 2) {
     if (includesAny(text, ["olive oil", "butter", "cream"])) {
-      return "Use it in cooking every day — it’s just a basic ingredient, nothing added";
+      return "Använd det i matlagning varje dag — det är bara en basingrediiens, inget tillsatt";
     }
     if (includesAny(text, ["kvarg", "skyr"])) {
-      return "A great everyday protein snack — just strained milk, nothing added";
+      return "En utmärkt proteinsnack varje dag — bara silad mjölk, inget tillsatt";
     }
     if (includesAny(text, ["yogurt", "yoghurt", "filmjolk", "milk", "filmjölk"])) {
-      return "A solid everyday choice — great for breakfast or as a snack between meals";
+      return "Ett solitt vardagsval — perfekt till frukost eller som mellanmål";
     }
     if (includesAny(text, ["knackebrod", "knäckebröd", "wasa", "leksands", "crispbread"])) {
-      return "A Swedish kitchen staple — pick ones with just rye, water and salt for the cleanest option";
+      return "En svensk köksstapel — välj de med bara råg, vatten och salt för det renaste alternativet";
     }
-    return "This is a simple, lightly processed ingredient — fine to eat every day without thinking twice";
+    return "En enkel, lätt bearbetad ingrediens — bra att äta varje dag utan att tänka på det";
   }
 
   if (level === 3) {
     if (includesAny(text, ["bread", "brod", "bröd"])) {
-      return "Most people eat bread daily and that’s ok — just look for versions with fewer than 5 ingredients";
+      return "De flesta äter bröd varje dag och det är okej — leta bara efter versioner med färre än 5 ingredienser";
     }
     if (includesAny(text, ["cornflakes", "corn flakes", "cereal", "granola", "muesli"])) {
-      return "OK occasionally but not the best daily breakfast — high sugar versions will leave you hungry fast";
+      return "Okej ibland men inte det bästa dagliga frukostalternativet — högsockerversioner gör att du snart blir hungrig igen";
     }
     if (includesAny(text, ["cheese", "ost"])) {
-      return "Great on sandwiches or in cooking — just not the whole block in one sitting";
+      return "Perfekt på smörgåsar eller i matlagning — bara inte hela blocket på en gång";
     }
     if (includesAny(text, ["kottbullar", "köttbullar", "meatball", "meatballs"])) {
-      return "Packaged: level 3–4 / Homemade: level 2 — if you have 20 minutes, homemade is always the better call";
+      return "Färdigköpta: nivå 3\u20134 / Hemgjorda: nivå 2 — om du har 20 minuter är hemgjorda alltid det bättre valet";
     }
     if (includesAny(text, ["pasta", "rice cakes"])) {
-      return "A reliable dinner staple — just watch the portion size and add some vegetables";
+      return "En pålitlig middagsrätt — kolla bara portionsstorleken och lägg till lite grönsaker";
     }
     if (includesAny(text, ["kanelbulle", "semla"])) {
-      return "A Swedish classic — enjoy it as the treat it is, not an everyday snack";
+      return "En svensk klassiker — njut av den som den godis den är, inte som en vardagssnack";
     }
     if (includesAny(text, ["sauce", "dressing"])) {
-      return "Use it to add flavour — just check the label, many sauces hide a surprising amount of sugar";
+      return "Använd det för smak — kolla bara etiketten, många såser döljer överraskande mycket socker";
     }
-    return "Worth eating less often than whole foods — but no need to stress if it’s part of a varied diet";
+    return "Värt att äta mer sällan än hela livsmedel — men ingen anledning att stressa om det är en del av en varierad kost";
   }
 
   // level 4
   if (includesAny(text, ["falukorv"])) {
-    return "A Swedish classic but heavily processed — fine occasionally, just not every day";
+    return "En svensk klassiker men kraftigt bearbetad — bra ibland, men inte varje dag";
   }
   if (includesAny(text, ["sausage", "korv", "bacon", "salami", "ham", "chorizo", "pepperoni"])) {
-    return "Best saved for weekends — high in preservatives and salt";
+    return "Bäst sparat till helgen — hög halt av konserveringsmedel och salt";
   }
   if (includesAny(text, ["chips", "crisps"])) {
-    return "Great for movie nights — just don’t make it your afternoon snack every day";
+    return "Perfekt till filmkvällar — men gör det inte till din eftermiddagssnack varje dag";
   }
   if (includesAny(text, ["candy", "chocolate", "godis"])) {
-    return "It’s candy — enjoy it and don’t overthink it, just not every day";
+    return "Det är godis — njut av det och övertänk det inte, bara inte varje dag";
   }
   if (includesAny(text, ["soda", "energy drink", "läsk"])) {
-    return "Worth replacing with water or sparkling water most of the time";
+    return "Värt att byta mot vatten eller kolsyrat vatten för det mesta";
   }
   if (includesAny(text, ["pizza", "frozen", "lasagna", "ready meal"])) {
-    return "Fine for a lazy night — just not every night";
+    return "Fint för en lat kväll — bara inte varje kväll";
   }
   if (includesAny(text, ["veggie burger", "veggie patty", "plant burger"])) {
-    return "Most plant-based burgers are just as processed as meat ones — check the label for a shorter ingredient list";
+    return "De flesta växtbaserade burgare är lika bearbetade som köttburgare — kolla etiketten för en kortare ingredienslista";
   }
   if (includesAny(text, ["burger", "nuggets", "fried chicken"])) {
-    return "A once-in-a-while meal — fun but not fuel";
+    return "En måltid att njuta av ibland — rolig men inte bränsle";
   }
-  return "This one is heavily processed — fine to enjoy sometimes but your body will thank you for not making it a habit";
+  return "Den här är kraftigt bearbetad — kul att njuta av ibland men din kropp kommer tacka dig för att inte göra det till en vana";
 }
 
-const funFacts: Array<{ keywords: string[]; fact: string }> = [
-  { keywords: ["butter"], fact: "Butter gets a bad rep — but it's just cream and salt, one of the least processed dairy products you can buy" },
-  { keywords: ["eggs", "egg"], fact: "Eggs have been unfairly blamed for decades — they're a whole food with zero processing and great nutrition" },
-  { keywords: ["plain yogurt"], fact: "Plain yogurt is just milk and cultures — it's the flavoured versions that are full of sugar and additives" },
-  { keywords: ["dark chocolate"], fact: "Dark chocolate 70%+ is much less processed than milk chocolate — and actually contains real cacao benefits" },
-  { keywords: ["cheese", "ost"], fact: "Real aged cheese has a surprisingly short ingredient list — milk, cultures, rennet, salt. That's it" },
-  { keywords: ["creme fraiche", "crème fraiche"], fact: "Crème fraiche is just cream with cultures added — barely processed and totally fine in cooking" },
-  { keywords: ["avocado"], fact: "Avocados are pure whole food — the fat is healthy and there's nothing added whatsoever" },
-  { keywords: ["honey"], fact: "Honey is minimally processed — it goes from hive to jar with very little done to it" },
-  { keywords: ["coconut oil"], fact: "Coconut oil is a basic culinary ingredient — no additives, just pressed coconut" },
-  { keywords: ["filmjolk", "filmjölk"], fact: "Filmjölk is fermented milk with a very short ingredient list — one of Sweden's cleanest dairy staples" },
-  { keywords: ["kvarg", "skyr"], fact: "Kvarg and skyr are just strained milk — despite looking like a processed product, they're very clean" },
-  { keywords: ["knackebrod", "knäckebröd", "crispbread"], fact: "Plain knäckebröd is often just rye, water and salt — one of the cleanest bread options you can buy" },
-  { keywords: ["canned tomatoes"], fact: "Canned tomatoes are just tomatoes — barely changed from fresh, and sometimes more nutritious" },
-  { keywords: ["frozen vegetables", "frozen veg"], fact: "Frozen vegetables are often frozen straight after harvest — they can be just as nutritious as fresh" },
-  { keywords: ["sardines"], fact: "Sardines in olive oil are just fish and oil — canned doesn't mean processed here" },
-  { keywords: ["full fat milk"], fact: "Full fat milk is just milk — less processed than low fat versions which have things removed and added back" },
-  { keywords: ["almonds", "plain nuts"], fact: "Plain nuts are a whole food — it's only when they're flavoured or roasted in oil that processing kicks in" },
-  { keywords: ["tofu"], fact: "Tofu looks industrial but it's just compressed soya milk — a surprisingly clean ingredient" },
-  { keywords: ["herring", "sill"], fact: "Herring is one of Sweden's cleanest protein sources — plain or pickled in basic brine is level 1-2" },
-  { keywords: ["canned chickpeas", "chickpeas"], fact: "Canned chickpeas are just chickpeas and water — canned doesn't always mean processed" },
-  { keywords: ["plain popcorn", "popcorn"], fact: "Plain air-popped popcorn is a whole grain — it's the flavoured bagged versions that are ultra processed" },
-  { keywords: ["dark rye bread", "rye bread"], fact: "Dark rye bread is much less processed than white bread — look for versions with just rye, water and salt" },
-  { keywords: ["flavoured yogurt", "flavored yogurt"], fact: "Flavoured yogurts are often closer to dessert than health food — full of sugar, flavourings and thickeners" },
-  { keywords: ["fruit juice"], fact: "Fruit juice strips out all the fibre and often adds sugar — eating the whole fruit is always better" },
-  { keywords: ["breakfast cereal"], fact: "Most breakfast cereals are highly processed — even the ones that say 'whole grain' on the box" },
-  { keywords: ["protein bar"], fact: "Protein bars often have ingredient lists as long as a chocolate bar — the protein doesn't make up for the rest" },
-  { keywords: ["rice cakes"], fact: "Rice cakes are highly processed and spike blood sugar fast — they're not the diet food people think they are" },
-  { keywords: ["oat milk"], fact: "Oat milk has added oils, stabilisers and often sugar — plain oats are level 1, oat milk is level 3" },
-  { keywords: ["low fat"], fact: "Low fat products usually replace fat with sugar and additives — full fat versions are often cleaner" },
-  { keywords: ["deli turkey", "deli chicken"], fact: "Deli meats are heavily processed — what looks like plain chicken often contains sodium nitrite and fillers" },
-  { keywords: ["veggie burger"], fact: "Most veggie burgers are just as processed as meat burgers — sometimes more, with long additive lists" },
-  { keywords: ["flavoured nuts"], fact: "Flavoured nuts are very different from plain ones — coatings and seasonings push them to level 3-4" },
-  { keywords: ["instant oats"], fact: "Plain oats are one of the best foods you can eat — but flavoured instant packets are level 3 processed" },
-  { keywords: ["coleslaw"], fact: "Packaged coleslaw looks like just cabbage but is full of preservatives, sugar and stabilisers" },
-  { keywords: ["bottled smoothie", "smoothie"], fact: "Bottled smoothies are pasteurised and often have added sugars — a whole piece of fruit is always better" },
-  { keywords: ["granola"], fact: "Granola is often one of the most sugar-dense breakfast options — sometimes worse than cornflakes" },
-  { keywords: ["actimel", "yogurt drink", "probiotic drink"], fact: "Probiotic yogurt drinks are heavily processed and high in sugar — plain yogurt has the same benefits" },
+const funFacts: Array<{ keywords: string[]; sv: string; en: string }> = [
+  { keywords: ["butter"], sv: "Smör får dåligt rykte — men det är bara grädde och salt, en av de minst bearbetade mejeriprodukterna du kan köpa", en: "Butter gets a bad rep — but it's just cream and salt, one of the least processed dairy products you can buy" },
+  { keywords: ["eggs", "egg"], sv: "Ägg har fått orättvis kritik i decennier — de är riktig mat med noll bearbetning och bra näring", en: "Eggs have been unfairly blamed for decades — they're a whole food with zero processing and great nutrition" },
+  { keywords: ["plain yogurt"], sv: "Naturell yoghurt är bara mjölk och kulturer — det är de smaksatta versionerna som är fulla av socker och tillsatser", en: "Plain yogurt is just milk and cultures — it's the flavoured versions that are full of sugar and additives" },
+  { keywords: ["dark chocolate"], sv: "Mörk choklad 70%+ är mycket mindre bearbetad än mjölkchoklad — och innehåller faktiskt riktiga kakaofördelar", en: "Dark chocolate 70%+ is much less processed than milk chocolate — and actually contains real cacao benefits" },
+  { keywords: ["cheese", "ost"], sv: "Äkta lagrad ost har en förvånansvärt kort ingredienslista — mjölk, kulturer, löpe, salt. Det är allt", en: "Real aged cheese has a surprisingly short ingredient list — milk, cultures, rennet, salt. That's it" },
+  { keywords: ["creme fraiche", "crème fraiche"], sv: "Crème fraiche är bara grädde med kulturer tillagda — knappt bearbetad och helt okej i matlagning", en: "Crème fraiche is just cream with cultures added — barely processed and totally fine in cooking" },
+  { keywords: ["avocado"], sv: "Avokado är ren helfoder — fettet är nyttigt och inget är tillsatt", en: "Avocados are pure whole food — the fat is healthy and there's nothing added whatsoever" },
+  { keywords: ["honey"], sv: "Honung är minimalt bearbetad — den går från bikupan till burken med väldigt lite gjort", en: "Honey is minimally processed — it goes from hive to jar with very little done to it" },
+  { keywords: ["coconut oil"], sv: "Kokosolja är en basingrediiens — inga tillsatser, bara pressad kokos", en: "Coconut oil is a basic culinary ingredient — no additives, just pressed coconut" },
+  { keywords: ["filmjolk", "filmjölk"], sv: "Filmjölk är fermenterad mjölk med en väldigt kort ingredienslista — en av Sveriges renaste mejeristaplar", en: "Filmjölk is fermented milk with a very short ingredient list — one of Sweden's cleanest dairy staples" },
+  { keywords: ["kvarg", "skyr"], sv: "Kvarg och skyr är bara silad mjölk — trots att de ser ut som bearbetade produkter är de väldigt rena", en: "Kvarg and skyr are just strained milk — despite looking like a processed product, they're very clean" },
+  { keywords: ["knackebrod", "knäckebröd", "crispbread"], sv: "Vanlig knäckebröd är ofta bara råg, vatten och salt — ett av de renaste brödval du kan köpa", en: "Plain knäckebröd is often just rye, water and salt — one of the cleanest bread options you can buy" },
+  { keywords: ["canned tomatoes"], sv: "Krossade tomater är bara tomater — knappt förändrade från färska, och ibland mer näringsrika", en: "Canned tomatoes are just tomatoes — barely changed from fresh, and sometimes more nutritious" },
+  { keywords: ["frozen vegetables", "frozen veg"], sv: "Frysta grönsaker fryses ofta direkt efter skörd — de kan vara lika näringsrika som färska", en: "Frozen vegetables are often frozen straight after harvest — they can be just as nutritious as fresh" },
+  { keywords: ["sardines"], sv: "Sardiner i olivolja är bara fisk och olja — konserv betyder inte bearbetat här", en: "Sardines in olive oil are just fish and oil — canned doesn't mean processed here" },
+  { keywords: ["full fat milk"], sv: "Helmjölk är bara mjölk — mindre bearbetad än lättmjölk som har saker borttagna och tillagda", en: "Full fat milk is just milk — less processed than low fat versions which have things removed and added back" },
+  { keywords: ["almonds", "plain nuts"], sv: "Vanliga nötter är helfoder — det är bara när de är smaksatta eller rostade i olja som bearbetning sker", en: "Plain nuts are a whole food — it's only when they're flavoured or roasted in oil that processing kicks in" },
+  { keywords: ["tofu"], sv: "Tofu ser industriellt ut men är bara pressad sojamjölk — en förvånansvärt ren ingrediens", en: "Tofu looks industrial but it's just compressed soya milk — a surprisingly clean ingredient" },
+  { keywords: ["herring", "sill"], sv: "Sill är ett av Sveriges renaste proteinkällor — vanlig eller inlagd i enkel lag är nivå 1-2", en: "Herring is one of Sweden's cleanest protein sources — plain or pickled in basic brine is level 1-2" },
+  { keywords: ["canned chickpeas", "chickpeas"], sv: "Konserverade kikärtor är bara kikärtor och vatten — konserv betyder inte alltid bearbetat", en: "Canned chickpeas are just chickpeas and water — canned doesn't always mean processed" },
+  { keywords: ["plain popcorn", "popcorn"], sv: "Vanlig popcorn är ett fullkorn — det är de smaksatta färdigförpackade versionerna som är ultraprocessade", en: "Plain air-popped popcorn is a whole grain — it's the flavoured bagged versions that are ultra processed" },
+  { keywords: ["dark rye bread", "rye bread"], sv: "Mörkt rågbröd är mycket mindre bearbetat än vitt bröd — leta efter versioner med bara råg, vatten och salt", en: "Dark rye bread is much less processed than white bread — look for versions with just rye, water and salt" },
+  { keywords: ["flavoured yogurt", "flavored yogurt"], sv: "Smaksatt yoghurt är ofta närmre dessert än hälsomat — full av socker, smakämnen och förtjockningsmedel", en: "Flavoured yogurts are often closer to dessert than health food — full of sugar, flavourings and thickeners" },
+  { keywords: ["fruit juice"], sv: "Fruktjuice tar bort allt fiber och tillsätter ofta socker — att äta hela frukten är alltid bättre", en: "Fruit juice strips out all the fibre and often adds sugar — eating the whole fruit is always better" },
+  { keywords: ["breakfast cereal"], sv: "De flesta frukostflingor är kraftigt bearbetade — även de som säger 'fullkorn' på förpackningen", en: "Most breakfast cereals are highly processed — even the ones that say 'whole grain' on the box" },
+  { keywords: ["protein bar"], sv: "Proteinbars har ofta lika lång ingredienslista som en chokladkaka — proteinet väger inte upp för resten", en: "Protein bars often have ingredient lists as long as a chocolate bar — the protein doesn't make up for the rest" },
+  { keywords: ["rice cakes"], sv: "Riskex är kraftigt bearbetade och ger snabb blodsockerstegring — de är inte den dietmat folk tror de är", en: "Rice cakes are highly processed and spike blood sugar fast — they're not the diet food people think they are" },
+  { keywords: ["oat milk"], sv: "Havremjölk har tillsatta oljor, stabilisatorer och ofta socker — vanliga havregryn är nivå 1, havremjölk är nivå 3", en: "Oat milk has added oils, stabilisers and often sugar — plain oats are level 1, oat milk is level 3" },
+  { keywords: ["low fat"], sv: "Lättversioner byter vanligtvis ut fett mot socker och tillsatser — fullfetversionerna är ofta renare", en: "Low fat products usually replace fat with sugar and additives — full fat versions are often cleaner" },
+  { keywords: ["deli turkey", "deli chicken"], sv: "Charkuterikött är kraftigt bearbetat — det som ser ut som vanlig kyckling innehåller ofta natriumnitrit och fyllmedel", en: "Deli meats are heavily processed — what looks like plain chicken often contains sodium nitrite and fillers" },
+  { keywords: ["veggie burger"], sv: "De flesta vegoburgare är lika bearbetade som köttburgare — ibland mer, med långa tillsatslistor", en: "Most veggie burgers are just as processed as meat burgers — sometimes more, with long additive lists" },
+  { keywords: ["flavoured nuts"], sv: "Smaksatta nötter är väldigt annorlunda mot vanliga — beläggningar och kryddor tar dem till nivå 3-4", en: "Flavoured nuts are very different from plain ones — coatings and seasonings push them to level 3-4" },
+  { keywords: ["instant oats"], sv: "Vanliga havregryn är ett av de bästa livsmedel du kan äta — men smaksatta snabbhavrepaket är nivå 3 bearbetade", en: "Plain oats are one of the best foods you can eat — but flavoured instant packets are level 3 processed" },
+  { keywords: ["coleslaw"], sv: "Färdigköpt coleslaw ser ut som bara kål men är full av konserveringsmedel, socker och stabilisatorer", en: "Packaged coleslaw looks like just cabbage but is full of preservatives, sugar and stabilisers" },
+  { keywords: ["bottled smoothie", "smoothie"], sv: "Flasksmoothies är pastöriserade och har ofta tillsatt socker — en hel frukt är alltid bättre", en: "Bottled smoothies are pasteurised and often have added sugars — a whole piece of fruit is always better" },
+  { keywords: ["granola"], sv: "Granola är ofta ett av de sockertätaste frukostalternativen — ibland värre än cornflakes", en: "Granola is often one of the most sugar-dense breakfast options — sometimes worse than cornflakes" },
+  { keywords: ["actimel", "yogurt drink", "probiotic drink"], sv: "Probiotiska yoghurtdrycker är kraftigt bearbetade och höga i socker — vanlig yoghurt har samma fördelar", en: "Probiotic yogurt drinks are heavily processed and high in sugar — plain yogurt has the same benefits" },
 ];
 
-function getFunFact(food: string): string | null {
+function getFunFact(food: string, lang: Lang): string | null {
   const normalized = normalizeText(food);
   for (const entry of funFacts) {
     if (entry.keywords.some((k) => {
@@ -789,13 +900,13 @@ function getFunFact(food: string): string | null {
       const regex = new RegExp(`(^|\\s)${kn}s?(\\s|$)`);
       return regex.test(normalized);
     })) {
-      return entry.fact;
+      return lang === "en" ? entry.en : entry.sv;
     }
   }
   return null;
 }
 
-function buildResult(food: string, offProduct?: AnalyzeRequest["offProduct"]): AnalyzeResult {
+function buildResult(food: string, lang: Lang, offProduct?: AnalyzeRequest["offProduct"]): AnalyzeResult {
   if (checkNotFound(food, offProduct)) {
     return {
       level: 0,
@@ -848,19 +959,19 @@ function buildResult(food: string, offProduct?: AnalyzeRequest["offProduct"]): A
 
   return {
     level,
-    levelName: levelNames[level],
-    verdict: getVerdict(level),
+    levelName: levelNamesMap[lang][level],
+    verdict: getVerdict(level, lang),
     brand: brandFields.brand,
     brandSuggested: brandFields.brandSuggested,
     suggestedBrands: brandFields.suggestedBrands,
     ingredients: level === 1 ? null : ingredients,
     harmfulIngredients,
-    betterChoice: getBetterChoice(food, level),
+    betterChoice: getBetterChoice(food, level, lang),
     estimated,
     source: offProduct ? "openfoodfacts" : "estimated",
-    verdictLabel: getVerdictLabel(level),
-    verdictDescription: getVerdictDescription(food, level),
-    funFact: getFunFact(food),
+    verdictLabel: getVerdictLabel(level, lang),
+    verdictDescription: getVerdictDescription(food, level, lang),
+    funFact: getFunFact(food, lang),
     notFound: false,
   };
 }
@@ -874,7 +985,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Food item is required" }, { status: 400 });
     }
 
-    const result = buildResult(food, body.offProduct ?? null);
+    const lang: Lang = body.lang === "en" ? "en" : "sv";
+    const result = buildResult(food, lang, body.offProduct ?? null);
     return NextResponse.json({ result }, { status: 200 });
   } catch (err) {
     console.error("Analyze error:", err);

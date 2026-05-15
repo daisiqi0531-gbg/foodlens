@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { LanguageProvider } from "./contexts/LanguageContext";
+import { LanguageToggle } from "./components/LanguageToggle";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,7 +31,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col font-[family-name:var(--font-inter)]" suppressHydrationWarning>
-        {children}
+        <LanguageProvider>
+          <div className="fixed top-3 right-3 z-50">
+            <LanguageToggle />
+          </div>
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

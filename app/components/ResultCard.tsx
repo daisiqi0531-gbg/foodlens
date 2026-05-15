@@ -1,5 +1,7 @@
 "use client";
 import { IngredientBullets } from "./IngredientDetail";
+import { useLang } from "../contexts/LanguageContext";
+import { UI } from "../i18n/translations";
 
 export interface AnalyzeResult {
   level: number;
@@ -24,6 +26,8 @@ interface ResultCardProps {
 }
 
 export function ResultCard({ result }: ResultCardProps) {
+  const { lang } = useLang();
+  const t = UI[lang];
   const verdictEmoji =
     result.level === 1 ? "🌱" : result.level === 2 ? "😊" : result.level === 3 ? "🤔" : "🫣";
 
@@ -50,10 +54,10 @@ export function ResultCard({ result }: ResultCardProps) {
       <div className="max-w-md mx-auto mt-4 p-6 md:p-8 bg-white dark:bg-gray-900/80 rounded-xl shadow-lg border border-transparent dark:border-gray-700 text-center">
         <p className="text-4xl mb-4">🥦🤷🫙</p>
         <p className="text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
-          We couldn't find that one
+          {t.notFoundTitle}
         </p>
         <p className="text-sm text-gray-400 leading-relaxed">
-          Try a food name like "oatly", "banana" or "cornflakes" — the more specific the better.
+          {t.notFoundDesc}
         </p>
       </div>
     );
@@ -83,7 +87,7 @@ export function ResultCard({ result }: ResultCardProps) {
 
         {/* Process level — supporting detail below */}
         <p className="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-1">
-          Process level
+          {t.processLevel}
         </p>
         <div className="flex items-center gap-2">
           <span className={`text-3xl font-bold leading-none ${levelText}`}>
@@ -100,13 +104,13 @@ export function ResultCard({ result }: ResultCardProps) {
         <div className="mt-3">
           {!result.brandSuggested && (
             <>
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">Brand</p>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">{t.brand}</p>
               <p className="mt-1 text-gray-800 dark:text-gray-100">{result.brand}</p>
             </>
           )}
           {result.brandSuggested && (
             <div className="mt-1">
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">Common brands in Sweden:</p>
+              <p className="text-sm font-semibold text-gray-900 dark:text-white">{t.commonBrands}</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {(result.suggestedBrands ?? []).map((brand) => (
                   <span
@@ -125,7 +129,7 @@ export function ResultCard({ result }: ResultCardProps) {
       {/* Ingredients Section */}
       {result.level >= 2 && result.ingredients && (
         <div className="mt-4">
-          <p className="text-sm font-semibold text-gray-900 dark:text-white">Ingredients</p>
+          <p className="text-sm font-semibold text-gray-900 dark:text-white">{t.ingredientsLabel}</p>
           <p className="mt-1 text-sm text-gray-700 dark:text-gray-200">{result.ingredients}</p>
 
 
@@ -136,17 +140,17 @@ export function ResultCard({ result }: ResultCardProps) {
       {result.level >= 3 && result.harmfulIngredients && result.harmfulIngredients.length > 0 && (
         <div className="mt-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-300 mb-2">
-            Why?
+            {t.why}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-            Potentially harmful ingredients:
+            {t.harmfulIngredientsLabel}
           </p>
           <IngredientBullets items={result.harmfulIngredients} />
           <a
             href="/ingredients"
             className="mt-3 inline-block text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
-            Understand these ingredients →
+            {t.understandIngredients}
           </a>
         </div>
       )}
@@ -154,7 +158,7 @@ export function ResultCard({ result }: ResultCardProps) {
       {/* Better Choice Section */}
       {result.level >= 3 && result.betterChoice && (
         <div className="mt-4 rounded-lg bg-green-50 p-3 dark:bg-green-800/30">
-          <p className="text-sm text-gray-800 dark:text-gray-100">💚 Better choice: {result.betterChoice.text}</p>
+          <p className="text-sm text-gray-800 dark:text-gray-100">{t.betterChoiceLabel} {result.betterChoice.text}</p>
           <ins
             className="adsbygoogle"
             style={{ display: "block" }}
@@ -172,9 +176,9 @@ export function ResultCard({ result }: ResultCardProps) {
       {/* Footer Note (always show) */}
       <div className="mt-4 space-y-1 border-t border-gray-200 pt-3 text-xs text-gray-500 dark:border-gray-600 dark:text-gray-200">
         {result.estimated ? (
-          <p>📊 Based on how this type of food is typically made - good to check the label too</p>
+          <p>{t.estimatedNote}</p>
         ) : (
-          <p>✓ Data sourced from OpenFoodFacts</p>
+          <p>{t.offNote}</p>
         )}
       </div>
     </div>

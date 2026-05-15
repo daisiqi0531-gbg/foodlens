@@ -2,36 +2,40 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { ingredients, type Ingredient } from "../../data/ingredients";
-
-const categoryLabels: Record<string, string> = {
-  all: "All",
-  "e-numbers": "E-numbers",
-  preservatives: "Preservatives",
-  sweeteners: "Sweeteners",
-  fats: "Fats & Oils",
-  thickeners: "Thickeners & Stabilisers",
-  flavour: "Flavour",
-  marketing: "Marketing terms",
-};
-
-const novaLabel: Record<number, string> = {
-  1: "🌱 Level 1",
-  2: "😊 Level 2",
-  3: "🤔 Level 3",
-  4: "🫣 Level 4",
-};
-
-const novaBg: Record<number, string> = {
-  1: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
-  2: "bg-lime-100 text-lime-700 dark:bg-lime-900/40 dark:text-lime-300",
-  3: "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300",
-  4: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
-};
+import { useLang } from "../contexts/LanguageContext";
+import { UI } from "../i18n/translations";
 
 export default function IngredientsPage() {
+  const { lang } = useLang();
+  const t = UI[lang];
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [selected, setSelected] = useState<Ingredient | null>(null);
+
+  const categoryLabels: Record<string, string> = {
+    all: t.categoryAll,
+    "e-numbers": t.categoryENumbers,
+    preservatives: t.categoryPreservatives,
+    sweeteners: t.categorySweeteners,
+    fats: t.categoryFats,
+    thickeners: t.categoryThickeners,
+    flavour: t.categoryFlavour,
+    marketing: t.categoryMarketing,
+  };
+
+  const novaLabel: Record<number, string> = {
+    1: `🌱 ${lang === "sv" ? "Nivå" : "Level"} 1`,
+    2: `😊 ${lang === "sv" ? "Nivå" : "Level"} 2`,
+    3: `🤔 ${lang === "sv" ? "Nivå" : "Level"} 3`,
+    4: `🫣 ${lang === "sv" ? "Nivå" : "Level"} 4`,
+  };
+
+  const novaBg: Record<number, string> = {
+    1: "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
+    2: "bg-lime-100 text-lime-700 dark:bg-lime-900/40 dark:text-lime-300",
+    3: "bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300",
+    4: "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
+  };
 
   const filtered = useMemo(() => {
     return ingredients.filter((i) => {
@@ -53,20 +57,20 @@ export default function IngredientsPage() {
           href="/"
           className="text-sm text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 transition-colors mb-6 inline-block"
         >
-          ← Back to FoodLens
+          {t.ingredientsBack}
         </Link>
 
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-1">
-          What's in your food?
+          {t.ingredientsPageTitle}
         </h1>
         <p className="text-sm text-gray-600 dark:text-gray-200 mb-6 leading-relaxed">
-          Common food ingredients explained in plain English — what they are, why they're used, and whether to worry.
+          {t.ingredientsPageSubtitle}
         </p>
 
         {/* Search */}
         <input
           type="text"
-          placeholder="Search an ingredient..."
+          placeholder={t.ingredientsSearchPlaceholder}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 bg-white dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400 text-base mb-4"
@@ -91,13 +95,13 @@ export default function IngredientsPage() {
 
         {category === "marketing" && (
           <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 leading-relaxed bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2">
-            These aren't ingredients — they're claims on packaging that are often misunderstood.
+            {t.marketingNote}
           </p>
         )}
 
         {/* Count */}
         <p className="text-sm text-gray-500 dark:text-gray-300 mb-4">
-          {filtered.length} ingredient{filtered.length !== 1 ? "s" : ""}
+          {t.ingredientCount(filtered.length)}
         </p>
 
         {/* Grid — 1 col mobile, 2 col desktop */}
@@ -134,7 +138,7 @@ export default function IngredientsPage() {
           <div className="text-center py-12">
             <p className="text-2xl mb-3">🔍</p>
             <p className="text-sm text-gray-400">
-              No ingredients found — try a different search
+              {t.noIngredientsFound}
             </p>
           </div>
         )}
@@ -177,19 +181,19 @@ export default function IngredientsPage() {
 
             <div className="space-y-4 text-sm">
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white mb-1">What it is</p>
+                <p className="font-semibold text-gray-900 dark:text-white mb-1">{t.whatItIs}</p>
                 <p className="text-gray-600 dark:text-gray-100 leading-relaxed">{selected.whatItIs}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white mb-1">Why it's used</p>
+                <p className="font-semibold text-gray-900 dark:text-white mb-1">{t.whyUsed}</p>
                 <p className="text-gray-600 dark:text-gray-100 leading-relaxed">{selected.whyUsed}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white mb-1">Should I worry?</p>
+                <p className="font-semibold text-gray-900 dark:text-white mb-1">{t.shouldWorry}</p>
                 <p className="text-gray-600 dark:text-gray-100 leading-relaxed">{selected.shouldWorry}</p>
               </div>
               <div>
-                <p className="font-semibold text-gray-900 dark:text-white mb-1">Commonly found in</p>
+                <p className="font-semibold text-gray-900 dark:text-white mb-1">{t.foundIn}</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {selected.foundIn.map((item) => (
                     <span

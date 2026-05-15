@@ -1,39 +1,41 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { ResultCard, type AnalyzeResult } from "./components/ResultCard";
+import { useLang } from "./contexts/LanguageContext";
+import { UI } from "./i18n/translations";
 
 const didYouKnowData = {
   better: [
-    { emoji: "🧈", food: "Butter", query: "butter", surprise: "People think it's bad", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🥚", food: "Eggs", query: "eggs", surprise: "People worry about cholesterol", label: "🌱 Level 1 — As clean as it gets" },
-    { emoji: "🫙", food: "Plain yogurt", query: "plain yogurt", surprise: "Seems like a processed product", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🧀", food: "Real cheese", query: "cheese", surprise: "Seems unhealthy", label: "🤔 Level 3 — Occasionally" },
-    { emoji: "🥑", food: "Avocado", query: "avocado", surprise: "People think it's too fatty", label: "🌱 Level 1 — As clean as it gets" },
-    { emoji: "🍫", food: "Dark chocolate", query: "dark chocolate", surprise: "Chocolate must be bad", label: "🤔 Level 3 — Occasionally" },
-    { emoji: "🥛", food: "Filmjölk", query: "filmjolk", surprise: "Dairy gets a bad rep", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🍯", food: "Honey", query: "honey", surprise: "It's basically sugar", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🐟", food: "Sardines", query: "sardines", surprise: "Canned fish seems processed", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🥦", food: "Frozen veg", query: "frozen vegetables", surprise: "Fresh is always better, right?", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🥒", food: "Kimchi", query: "kimchi", surprise: "Fermented food seems processed", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🍜", food: "Miso paste", query: "miso paste", surprise: "Looks like a processed product", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🥥", food: "Coconut milk", query: "coconut milk", surprise: "Seems like a processed drink", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🐟", food: "Fish sauce", query: "fish sauce", surprise: "Smells intense, must be processed", label: "😊 Level 2 — Everyday ingredient" },
-    { emoji: "🍚", food: "Tapai", query: "tapai", surprise: "Fermented food sounds processed", label: "😊 Level 2 — Everyday ingredient" },
+    { emoji: "🧈", food: "Butter", query: "butter", surprise: { sv: "Folk tror att det är dåligt", en: "People think it's bad" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🥚", food: "Eggs", query: "eggs", surprise: { sv: "Oroa sig för kolesterol", en: "People worry about cholesterol" }, label: { sv: "🌱 Nivå 1 — Så rent som det blir", en: "🌱 Level 1 — As clean as it gets" } },
+    { emoji: "🫙", food: "Plain yogurt", query: "plain yogurt", surprise: { sv: "Verkar som en bearbetad produkt", en: "Seems like a processed product" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🧀", food: "Real cheese", query: "cheese", surprise: { sv: "Verkar ohälsosamt", en: "Seems unhealthy" }, label: { sv: "🤔 Nivå 3 — Ibland", en: "🤔 Level 3 — Now and then" } },
+    { emoji: "🥑", food: "Avocado", query: "avocado", surprise: { sv: "Folk tror att det är för fett", en: "People think it's too fatty" }, label: { sv: "🌱 Nivå 1 — Så rent som det blir", en: "🌱 Level 1 — As clean as it gets" } },
+    { emoji: "🍫", food: "Dark chocolate", query: "dark chocolate", surprise: { sv: "Choklad måste vara dåligt", en: "Chocolate must be bad" }, label: { sv: "🤔 Nivå 3 — Ibland", en: "🤔 Level 3 — Now and then" } },
+    { emoji: "🥛", food: "Filmjölk", query: "filmjolk", surprise: { sv: "Mejeriprodukter får dåligt rykte", en: "Dairy gets a bad rep" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🍯", food: "Honey", query: "honey", surprise: { sv: "Det är i princip socker", en: "It's basically sugar" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🐟", food: "Sardines", query: "sardines", surprise: { sv: "Konservfisk verkar bearbetad", en: "Canned fish seems processed" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🥦", food: "Frozen veg", query: "frozen vegetables", surprise: { sv: "Färskt är alltid bättre, eller?", en: "Fresh is always better, right?" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🥒", food: "Kimchi", query: "kimchi", surprise: { sv: "Fermenterad mat verkar bearbetad", en: "Fermented food seems processed" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🍜", food: "Miso paste", query: "miso paste", surprise: { sv: "Ser ut som en bearbetad produkt", en: "Looks like a processed product" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🥥", food: "Coconut milk", query: "coconut milk", surprise: { sv: "Verkar som en bearbetad dryck", en: "Seems like a processed drink" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🐟", food: "Fish sauce", query: "fish sauce", surprise: { sv: "Luktar intensivt, måste vara bearbetat", en: "Smells intense, must be processed" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
+    { emoji: "🍚", food: "Tapai", query: "tapai", surprise: { sv: "Fermenterat låter bearbetat", en: "Fermented food sounds processed" }, label: { sv: "😊 Nivå 2 — Vardagsmat", en: "😊 Level 2 — Everyday food" } },
   ],
   worse: [
-    { emoji: "🍓", food: "Flavoured yogurt", query: "flavoured yogurt", surprise: "It's yogurt, it's healthy", label: "🫣 Level 4 — Keep as a treat" },
-    { emoji: "🧃", food: "Fruit juice", query: "fruit juice", surprise: "It's just fruit", label: "🫣 Level 4 — Keep as a treat" },
-    { emoji: "🥣", food: "Granola", query: "granola", surprise: "Healthy breakfast choice", label: "🤔 Level 3 — Occasionally" },
-    { emoji: "💪", food: "Protein bar", query: "protein bar", surprise: "High protein = healthy", label: "🫣 Level 4 — Keep as a treat" },
-    { emoji: "🥛", food: "Oat milk", query: "oat milk", surprise: "Plant-based = good", label: "🤔 Level 3 — Occasionally" },
-    { emoji: "🦃", food: "Deli turkey", query: "deli turkey", surprise: "It's just chicken", label: "🫣 Level 4 — Keep as a treat" },
-    { emoji: "🌱", food: "Veggie burger", query: "veggie burger", surprise: "Plant-based = healthy", label: "🫣 Level 4 — Keep as a treat" },
-    { emoji: "🎑", food: "Rice cakes", query: "rice cakes", surprise: "Light diet food", label: "🤔 Level 3 — Occasionally" },
-    { emoji: "🥤", food: "Smoothie (bottled)", query: "bottled smoothie", surprise: "It's just fruit", label: "🤔 Level 3 — Occasionally" },
-    { emoji: "🥜", food: "Flavoured nuts", query: "flavoured nuts", surprise: "Nuts are healthy", label: "🤔 Level 3 — Occasionally" },
-    { emoji: "🍜", food: "Instant ramen", query: "instant ramen", surprise: "It's just noodles, right?", label: "🫣 Level 4 — Keep as a treat" },
-    { emoji: "🍱", food: "Teriyaki sauce", query: "teriyaki sauce", surprise: "Just a simple glaze", label: "🫣 Level 4 — Keep as a treat" },
-    { emoji: "🥟", food: "Frozen dumplings", query: "frozen dumpling", surprise: "Just meat and dough", label: "🫣 Level 4 — Keep as a treat" },
+    { emoji: "🍓", food: "Flavoured yogurt", query: "flavoured yogurt", surprise: { sv: "Det är yoghurt, det är hälsosamt", en: "It's yogurt, it's healthy" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
+    { emoji: "🧃", food: "Fruit juice", query: "fruit juice", surprise: { sv: "Det är bara frukt", en: "It's just fruit" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
+    { emoji: "🥣", food: "Granola", query: "granola", surprise: { sv: "Hälsosamt frukostval", en: "Healthy breakfast choice" }, label: { sv: "🤔 Nivå 3 — Ibland", en: "🤔 Level 3 — Now and then" } },
+    { emoji: "💪", food: "Protein bar", query: "protein bar", surprise: { sv: "Högt protein = hälsosamt", en: "High protein = healthy" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
+    { emoji: "🥛", food: "Oat milk", query: "oat milk", surprise: { sv: "Växtbaserat = bra", en: "Plant-based = good" }, label: { sv: "🤔 Nivå 3 — Ibland", en: "🤔 Level 3 — Now and then" } },
+    { emoji: "🦃", food: "Deli turkey", query: "deli turkey", surprise: { sv: "Det är bara kyckling", en: "It's just chicken" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
+    { emoji: "🌱", food: "Veggie burger", query: "veggie burger", surprise: { sv: "Växtbaserat = hälsosamt", en: "Plant-based = healthy" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
+    { emoji: "🎑", food: "Rice cakes", query: "rice cakes", surprise: { sv: "Lätt dietmat", en: "Light diet food" }, label: { sv: "🤔 Nivå 3 — Ibland", en: "🤔 Level 3 — Now and then" } },
+    { emoji: "🥤", food: "Smoothie (bottled)", query: "bottled smoothie", surprise: { sv: "Det är bara frukt", en: "It's just fruit" }, label: { sv: "🤔 Nivå 3 — Ibland", en: "🤔 Level 3 — Now and then" } },
+    { emoji: "🥜", food: "Flavoured nuts", query: "flavoured nuts", surprise: { sv: "Nötter är hälsosamma", en: "Nuts are healthy" }, label: { sv: "🤔 Nivå 3 — Ibland", en: "🤔 Level 3 — Now and then" } },
+    { emoji: "🍜", food: "Instant ramen", query: "instant ramen", surprise: { sv: "Det är bara nudlar, eller?", en: "It's just noodles, right?" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
+    { emoji: "🍱", food: "Teriyaki sauce", query: "teriyaki sauce", surprise: { sv: "Bara ett enkelt glasyr", en: "Just a simple glaze" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
+    { emoji: "🥟", food: "Frozen dumplings", query: "frozen dumpling", surprise: { sv: "Bara kött och deg", en: "Just meat and dough" }, label: { sv: "🫣 Nivå 4 — En njutning", en: "🫣 Level 4 — A treat" } },
   ]
 };
 
@@ -114,6 +116,8 @@ const LogoSpinner = ({ size = 24 }: { size?: number }) => {
 };
 
 export default function Home() {
+  const { lang } = useLang();
+  const t = UI[lang];
   const [mounted, setMounted] = useState(false);
   const [food, setFood] = useState("");
   const [result, setResult] = useState<AnalyzeResult | null>(null);
@@ -192,7 +196,7 @@ export default function Home() {
   const analyzeFood = async (overrideFood?: string) => {
     const foodToAnalyze = (overrideFood ?? food).trim();
     if (!foodToAnalyze) {
-      showToast("Type a food or brand to get started 🔍");
+        showToast(t.emptyToast);
       return;
     }
 
@@ -224,7 +228,7 @@ export default function Home() {
       // Call API with optional OFF product data
       const res = await fetch("/api/analyze", {
         method: "POST",
-        body: JSON.stringify({ food: query, offProduct }),
+        body: JSON.stringify({ food: query, offProduct, lang }),
       });
 
       const data = await res.json();
@@ -276,7 +280,7 @@ export default function Home() {
           </h1>
         </button>
 
-        <p className="text-2xl md:text-3xl font-normal mb-1 leading-tight italic text-gray-700 dark:text-gray-100">Food clarity, made simple.</p>
+        <p className="text-2xl md:text-3xl font-normal mb-1 leading-tight italic text-gray-700 dark:text-gray-100">{t.tagline}</p>
       </div>
 
       {/* Main content - grows to fill available space */}
@@ -287,7 +291,7 @@ export default function Home() {
             <div className="relative flex-1">
               <input
                 type="text"
-                placeholder="Search any food or brand..."
+                placeholder={t.searchPlaceholder}
                 value={food}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -348,7 +352,7 @@ export default function Home() {
                   : "bg-gray-900 dark:bg-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-200"
               }`}
             >
-              Analyze
+              {loading ? t.searching : t.analyzeBtn}
             </button>
           </div>
 
@@ -356,7 +360,7 @@ export default function Home() {
           {(suggestionsLoading || filtered.length > 0) && (
             <div className="bg-white dark:bg-gray-800 mt-1 rounded-lg shadow-md overflow-hidden absolute left-0 right-0 z-10">
               {suggestionsLoading ? (
-                <div className="px-4 py-2 text-gray-400 text-sm">Searching...</div>
+                <div className="px-4 py-2 text-gray-400 text-sm">{t.searching}</div>
               ) : (
                 filtered.map((item, idx) => (
                   <div
@@ -382,16 +386,16 @@ export default function Home() {
         {!result && !food.trim() && (
           <>
           <p className="text-xs text-gray-400 text-center mt-4 mb-2">
-            Check how processed your food is, based on{" "}
+            {t.novaSubtitle}{" "}
             <button
               onClick={() => setShowNovaInfo(true)}
               className="text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
-              NOVA classification
+              {t.novaLink}
             </button>
           </p>
           <div className="w-full max-w-md mt-2 mb-0">
-            <p className="text-xs text-gray-400 text-center mb-2">Try these:</p>
+            <p className="text-xs text-gray-400 text-center mb-2">{t.tryThese}</p>
             <div className="flex flex-wrap justify-center gap-2">
               {exampleChips.map((chip) => (
                 <button
@@ -410,7 +414,7 @@ export default function Home() {
 
           <div className="w-full max-w-md mt-8">
             <div className="border-t border-gray-200 dark:border-gray-700 mb-3" />
-            <p className="text-xs text-gray-400 text-center mb-3">Did you know?</p>
+            <p className="text-xs text-gray-400 text-center mb-3">{t.didYouKnow}</p>
             <div className="flex gap-2 mb-3 justify-center">
               <button
                 onClick={() => setDidYouKnowTab("better")}
@@ -420,7 +424,7 @@ export default function Home() {
                     : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 active:bg-gray-100 dark:active:bg-gray-600"
                 }`}
               >
-                😮 Better than you think
+                {t.betterTab}
               </button>
               <button
                 onClick={() => setDidYouKnowTab("worse")}
@@ -430,7 +434,7 @@ export default function Home() {
                     : "bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 active:bg-gray-100 dark:active:bg-gray-600"
                 }`}
               >
-                😬 Worse than you think
+                {t.worseTab}
               </button>
             </div>
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
@@ -446,8 +450,8 @@ export default function Home() {
                 >
                   <p className="text-2xl mb-2">{item.emoji}</p>
                   <p className="text-xs font-semibold text-gray-900 dark:text-white mb-1 leading-tight">{item.food}</p>
-                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2 leading-tight italic">{item.surprise}</p>
-                  <p className="text-xs font-medium text-gray-700 dark:text-gray-300 leading-tight">{item.label}</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mb-2 leading-tight italic">{item.surprise[lang]}</p>
+                  <p className="text-xs font-medium text-gray-700 dark:text-gray-300 leading-tight">{item.label[lang]}</p>
                 </button>
               ))}
             </div>
@@ -468,7 +472,7 @@ export default function Home() {
           >
             <LogoSpinner size={24} />
             <p style={{ fontSize: "14px", color: "#9ca3af" }}>
-              Checking ingredients...
+              {t.checkingIngredients}
             </p>
           </div>
         )}
@@ -511,21 +515,17 @@ export default function Home() {
               ✕
             </button>
             <h2 className="text-base font-semibold text-gray-900 dark:text-white mb-3">
-              What is NOVA classification?
+              {t.novaModalTitle}
             </h2>
             <div className="space-y-3 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-              <p>
-                NOVA is a food classification system that groups foods into 4 categories based on the extent and purpose of their processing.
-              </p>
+              <p>{t.novaModalBody}</p>
               <div className="space-y-2">
-                <p><span className="text-green-600 font-semibold">Group 1</span> — Unprocessed or minimally processed foods (fruits, vegetables, eggs, meat)</p>
-                <p><span className="text-lime-600 font-semibold">Group 2</span> — Processed culinary ingredients (oils, butter, sugar, salt)</p>
-                <p><span className="text-orange-500 font-semibold">Group 3</span> — Processed foods (canned goods, cheese, cured meats, freshly baked bread)</p>
-                <p><span className="text-red-500 font-semibold">Group 4</span> — Ultra-processed foods (soft drinks, packaged snacks, instant noodles, reconstituted meat products)</p>
+                <p><span className="text-green-600 font-semibold">Group 1</span> — {t.novaG1.replace(/^Grupp 1 — |^Group 1 — /, "")}</p>
+                <p><span className="text-lime-600 font-semibold">Group 2</span> — {t.novaG2.replace(/^Grupp 2 — |^Group 2 — /, "")}</p>
+                <p><span className="text-orange-500 font-semibold">Group 3</span> — {t.novaG3.replace(/^Grupp 3 — |^Group 3 — /, "")}</p>
+                <p><span className="text-red-500 font-semibold">Group 4</span> — {t.novaG4.replace(/^Grupp 4 — |^Group 4 — /, "")}</p>
               </div>
-              <p className="text-xs text-gray-400 pt-1">
-                Research links high consumption of ultra-processed foods to increased risk of obesity, diabetes, and cardiovascular disease.
-              </p>
+              <p className="text-xs text-gray-400 pt-1">{t.novaResearch}</p>
             </div>
             <a
               href="https://nutritionsource.hsph.harvard.edu/processed-foods/"
@@ -533,7 +533,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="mt-4 inline-block text-xs text-gray-400 underline hover:text-gray-600 transition-colors"
             >
-              Learn more at Harvard T.H. Chan School of Public Health →
+              {t.novaLearnMore}
             </a>
           </div>
         </div>
@@ -543,26 +543,26 @@ export default function Home() {
       {!result && (
         <footer className="w-full max-w-md mt-auto pt-8 pb-6 text-center border-t border-gray-200 dark:border-gray-700">
           <p className="text-xs text-gray-400 leading-relaxed mb-4">
-            FoodLens is for information only — not medical or dietary advice.
+            {t.footerDisclaimer}
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <a
               href="/privacy"
               className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
-              Privacy Policy
+              {t.footerPrivacy}
             </a>
             <a
               href="/ingredients"
               className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
-              Ingredient Dictionary
+              {t.footerIngredients}
             </a>
             <button
               onClick={() => setShowNovaInfo(true)}
               className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
-              What is NOVA classification?
+              {t.footerNova}
             </button>
           </div>
         </footer>
