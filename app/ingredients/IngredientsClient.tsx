@@ -63,9 +63,17 @@ export default function IngredientsClient() {
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-1">
           {t.ingredientsPageTitle}
         </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-200 mb-6 leading-relaxed">
-          {t.ingredientsPageSubtitle}
-        </p>
+        <div className="mb-6">
+          <p className="text-sm text-gray-600 dark:text-gray-200 leading-relaxed mb-3">
+            {t.ingredientsPageSubtitle}
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
+            Modern food labels are full of technical names that most people don't recognise. E471, modified starch, glucose syrup — these ingredients appear on almost every packaged food, but few people know what they actually are or why they're there.
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+            This dictionary covers the most common food additives, sweeteners, preservatives and fats found in Swedish supermarkets — from the completely harmless to the ones worth being aware of. Each ingredient is rated by its NOVA signal, showing which processing level it typically indicates.
+          </p>
+        </div>
 
         {/* Search */}
         <input

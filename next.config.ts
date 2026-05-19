@@ -1,9 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  turbopack: {
-    root: "/Users/siqidai/Documents/foodlens",
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
