@@ -547,6 +547,12 @@ export default function Home() {
           </p>
           <div className="flex justify-center gap-4 flex-wrap">
             <a
+              href="/blog"
+              className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            >
+              Food Myths
+            </a>
+            <a
               href="/privacy"
               className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
