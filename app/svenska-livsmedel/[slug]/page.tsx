@@ -263,6 +263,396 @@ const articles: Record<string, {
     conclusion: "Köttbullar är fantastiska — men det spelar roll om de är hemgjorda eller färdigköpta. Gör en stor sats hemgjorda ibland och frys in. Du får ett nivå 2-livsmedel med full kontroll över ingredienserna.",
     cta: "Kolla köttbullar på FoodLens →",
   },
+
+  "kaviar": {
+    title: "Är kaviar (tub) nyttigt?",
+    subtitle: "Ser ut som ett enkelt fiskpålägg — men ingredienslistan berättar en annan historia.",
+    emoji: "🐟",
+    level: 4,
+    levelName: "Ultrabearbetat",
+    verdict: "🫣 En njutning — inte vardagsmat",
+    intro: "Kaviar på tub är en svensk frukostklassiker — på knäckebrödet, i ägget, på smörgåsen. Den lilla blå tuben verkar oskyldig. Men när vi kollar ingredienslistan hamnar kaviar på NOVA-nivå 4, samma kategori som chips och falukorv.",
+    sections: [
+      {
+        heading: "Vad innehåller kaviar på tub?",
+        body: "Kaviar på tub innehåller fisk och rom — men också E471 (emulgator), modifierad stärkelse, socker, smakämnen och konserveringsmedel. Det är dessa industriella tillsatser som placerar den i nivå 4. Riktig löjrom eller naturlig kaviar har en helt annan och mycket kortare ingredienslista.",
+      },
+      {
+        heading: "Varför behövs alla tillsatser?",
+        body: "Tuben ska hålla länge i kylskåpet utan att separera — det kräver emulgatorer och stabilisatorer. Smaken ska vara konsekvent och intensiv — det kräver smakämnen. Resultatet är en produkt som smakar kaviar men är industriellt reformulerad.",
+      },
+      {
+        heading: "Vad är ett renare alternativ?",
+        body: "Äkta löjrom eller naturlig kallrökt lax har dramatiskt kortare ingredienslistor och är nivå 1-2. De kostar mer men är genuina livsmedel utan industriella tillsatser. Om du äter kaviar på tub regelbundet är det värt att veta vad som finns i den.",
+      },
+      {
+        heading: "Ska man sluta äta den?",
+        body: "Inte nödvändigtvis — men det är bra att veta att det är ett ultrabearbetat livsmedel. En klick på knäckebrödet ibland är ingen katastrof. Gör den bara inte till en daglig vana utan att förstå vad som finns i tuben.",
+      },
+    ],
+    conclusion: "Kaviar på tub är ett bra exempel på hur ett livsmedel kan se enkelt ut men vara industriellt bearbetat. Ät den ibland, men välj äkta fisk och rom när du kan.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "musli": {
+    title: "Är müsli nyttigt?",
+    subtitle: "Hälsofrukostens kung — men ofta mer socker än cornflakes.",
+    emoji: "🥣",
+    level: 4,
+    levelName: "Ultrabearbetat",
+    verdict: "🫣 Kolla ingredienslistan noga",
+    intro: "Müsli säljs i kraftpapperförpackningar med bilder på nötter och bär och ord som 'naturlig' och 'nyttig'. Det känns som det hälsosammaste frukostalternativet i butiken. Men de flesta färdigmüsli är nivå 3-4 och kan innehålla mer socker per 100g än vanliga cornflakes.",
+    sections: [
+      {
+        heading: "Vad innehåller färdigmüsli?",
+        body: "Basen är havre och nötter — det låter bra. Men färdigmüsli tillsätter glukossirap, socker, palmfett, artificiella smakämnen och ibland chokladbitar eller kanderade frukter. Det är dessa ingredienser som höjer bearbetningsnivån till 3-4.",
+      },
+      {
+        heading: "Hur mycket socker kan det vara?",
+        body: "En del kommersiell müsli innehåller 25-30g socker per 100g — mer än många godissorter. Framsidan på förpackningen berättar sällan detta. Kolla alltid näringsvärdet på baksidan, inte framsidans hälsopåståenden.",
+      },
+      {
+        heading: "Finns det ren müsli?",
+        body: "Ja — men du måste leta. Kolla ingredienslistan och välj varianter med bara havre, nötter, frön och eventuellt lite torkad frukt utan tillsatt socker. Ingredienslistan ska vara kort och igenkännlig.",
+      },
+      {
+        heading: "Gör din egen",
+        body: "Blanda havregryn, nötter, frön och lite torkad frukt själv. Du kontrollerar vad som går i, och havregryn är nivå 1. Det tar fem minuter och kostar mindre än märkesmüsli.",
+      },
+    ],
+    conclusion: "Müsli kan vara ett utmärkt val — men kolla alltid ingredienslistan. Den med kortast lista och minst tillsatt socker vinner. Eller gör din egen med havregryn som bas.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "proteinbrod": {
+    title: "Är proteinbröd nyttigt?",
+    subtitle: "Högt protein låter bra — men de flesta proteinbröd är mer bearbetade än vanligt bröd.",
+    emoji: "🍞",
+    level: 4,
+    levelName: "Ultrabearbetat",
+    verdict: "🫣 En njutning — inte hälsobröd",
+    intro: "Proteinbröd marknadsförs till fitnessentusiaster och hälsomedvetna konsumenter. Högt protein, låg kolhydrat, perfekt för dig som tränar. Men när vi kollar NOVA-klassificeringen är de flesta proteinbröd nivå 4 — mer bearbetade än vanligt vitt bröd.",
+    sections: [
+      {
+        heading: "Vad innehåller proteinbröd?",
+        body: "Proteinet i proteinbröd kommer ofta från isolat — vassleprotein, sojaprotein eller ärtprotein som extraherats industriellt. Till det läggs E471, modifierad stärkelse, glukossirap och en rad stabilisatorer för att hålla brödet ihop trots den ovanliga sammansättningen. Ingredienslistan är ofta längre än vanligt bröd.",
+      },
+      {
+        heading: "Är proteinet bra?",
+        body: "Proteinet är verkligt — men det levereras med ett paket industriella tillsatser. Samma mängd protein finns i ägg, kvarg eller kyckling utan någon av dessa tillsatser. Proteinet neutraliserar inte resten av ingredienslistan.",
+      },
+      {
+        heading: "Hur jämförs det med vanligt bröd?",
+        body: "Vanligt surdegsbröd från ett bageri med 4-5 ingredienser är nivå 3. Proteinbröd med 15+ ingredienser är nivå 4. Paradoxalt nog är det 'vanliga' brödet ofta renare än hälsobrödet.",
+      },
+      {
+        heading: "Vad är bättre?",
+        body: "Välj bröd med kortast möjliga ingredienslista — surdeg, rågbröd eller knäckebröd med bara mjöl, vatten och salt. Få ditt protein från ägg, kvarg eller kött istället för bearbetat proteinbröd.",
+      },
+    ],
+    conclusion: "Proteinbröd är ett bra exempel på hur hälsopåståenden kan dölja hög bearbetningsgrad. Högt protein och rent livsmedel är inte samma sak. Välj enkelt bröd och äkta proteinkällor.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "smaksatt-kvarg": {
+    title: "Är smaksatt kvarg nyttigt?",
+    subtitle: "Naturell kvarg är nivå 2. Smaksatt kvarg är nivå 4. Samma förpackning — helt olika produkt.",
+    emoji: "🫙",
+    level: 4,
+    levelName: "Ultrabearbetat",
+    verdict: "🫣 Välj naturell istället",
+    intro: "Kvarg har ett välförtjänt hälsosammare rykte — och naturell kvarg lever upp till det. Men smaksatt kvarg är en helt annan produkt. Trots att de säljs sida vid sida i mejeriavdelningen är skillnaden i bearbetningsgrad dramatisk.",
+    sections: [
+      {
+        heading: "Vad är skillnaden?",
+        body: "Naturell kvarg: mjölk och mjölksyrekulturer — nivå 2. Smaksatt kvarg (jordgubb, vanilj, choklad): tillsätter glukossirap, artificiella smakämnen, E471, modifierad stärkelse och ibland konstgjorda färger — nivå 4. Samma proteinhalt, helt olika bearbetningsgrad.",
+      },
+      {
+        heading: "Varför köper folk smaksatt?",
+        body: "Den smakar bättre direkt ur förpackningen. Men smaken kommer från industriella smakämnen och socker — inte från riktiga jordgubbar. En naturell kvarg med färska bär är godare och dramatiskt renare.",
+      },
+      {
+        heading: "Hur mycket socker tillsätts?",
+        body: "Smaksatt kvarg kan innehålla 10-15g socker per 100g — mer än många folk förväntar sig av en 'hälsoprodukt'. Naturell kvarg har naturligt förekommande mjölksocker men inget tillsatt.",
+      },
+      {
+        heading: "Gör din egen smaksatta kvarg",
+        body: "Naturell kvarg med egna bär, lite honung och kanske lite vaniljpulver ger samma smakupplevelse med en bråkdel av bearbetningen. Du kontrollerar vad som går i och basen är nivå 2.",
+      },
+    ],
+    conclusion: "Smaksatt kvarg är ett tydligt exempel på hur samma råvara kan bearbetas till en helt annan produkt. Välj alltid naturell och lägg till egna smaker.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "fruktyoghurt": {
+    title: "Är fruktyoghurt nyttigt?",
+    subtitle: "Det är yoghurt, eller? Nej — det är dessert i yoghurtförpackning.",
+    emoji: "🍓",
+    level: 4,
+    levelName: "Ultrabearbetat",
+    verdict: "🫣 Närmre dessert än hälsomat",
+    intro: "Fruktyoghurt är en av de mest missförstådda produkterna i svenska butiker. Den säljs i mejeriavdelningen, den marknadsförs med fruktbilder och hälsopåståenden, och de flesta tror att det är ett bra frukost- eller mellanmålsval. Men NOVA-klassificeringen placerar den på nivå 4.",
+    sections: [
+      {
+        heading: "Vad innehåller fruktyoghurt?",
+        body: "Basen är yoghurt — men till det tillsätts glukossirap, artificiell jordgubbssmak, E471, modifierad stärkelse och ibland artificiella färger. Den faktiska frukten är ofta minimal — smaken kommer från industriella smakämnen.",
+      },
+      {
+        heading: "Hur mycket socker är det?",
+        body: "En vanlig fruktyoghurt innehåller 12-18g socker per 100g. En liten förpackning på 150g kan innehålla nästan lika mycket socker som en chokladkaka. Förpackningens framsida berättar sällan detta.",
+      },
+      {
+        heading: "Är lättyoghurt bättre?",
+        body: "Nej — ofta sämre. Lättyoghurt ersätter fettet med mer socker, fler smakämnen och fler stabilisatorer. Den är mer bearbetad än fullfetvarianten och håller dig inte lika mätt.",
+      },
+      {
+        heading: "Vad ska man äta istället?",
+        body: "Naturell yoghurt, kvarg eller filmjölk med egna bär och lite honung. Du får samma frukiga smak med ett renare baslivsmedel och full kontroll över sockerinnehållet.",
+      },
+    ],
+    conclusion: "Fruktyoghurt är ett av de tydligaste exemplen på hälsowashing i svenska butiker. Välj naturell och lägg till din egen frukt — det är godare, renare och du vet vad du äter.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "fiskpinnar": {
+    title: "Är fiskpinnar nyttiga?",
+    subtitle: "Barnfavoriten som ser oskyldig ut — men är industriellt bearbetad.",
+    emoji: "🐠",
+    level: 4,
+    levelName: "Ultrabearbetat",
+    verdict: "🫣 Ibland okej — men inte barnmat att äta varje dag",
+    intro: "Fiskpinnar är en av de vanligaste barnmiddagarna i Sverige. De är snabba att laga, barn älskar dem, och de verkar hälsosamma — det är ju fisk. Men fiskpinnar är nivå 4 ultrabearbetat, och det är värt att förstå varför.",
+    sections: [
+      {
+        heading: "Vad innehåller fiskpinnar?",
+        body: "Fiskinnehållet varierar mellan märken — ofta 50-65% fisk. Resten är panering av vetemjöl, E450 (fosfater), modifierad stärkelse, salt och smakämnen. Fosfater tillsätts för att hålla fisken saftig och panering fast — de är inte naturliga i hemlagad panerad fisk.",
+      },
+      {
+        heading: "Är fisken i dem bra?",
+        body: "Fisken i sig är bra — men den levereras med industriell panering och tillsatser. En hemlagad panerad fisk med bara fisk, ägg och ströbröd är dramatiskt renare och har samma smak.",
+      },
+      {
+        heading: "Varför äter barn dem så ofta?",
+        body: "De är bekväma, billiga och barn gillar smaken. Men bekvämlighet och näringsvärde är inte samma sak. Det finns inget fel med att servera dem ibland — men de bör inte vara barnets dagliga fiskintag.",
+      },
+      {
+        heading: "Bättre fiskalternativ för barn",
+        body: "Laxfilé, torskfilé eller makrill — tillagad enkelt med lite smör och citron — är nivå 1 och har ett helt annat näringsvärde. Det tar 10 minuter och barn vänjer sig snabbt om det introduceras tidigt.",
+      },
+    ],
+    conclusion: "Fiskpinnar ibland är ingen katastrof — men de är ultrabearbetad mat, inte ett hälsosamt barnmat-alternativ. Blanda dem med riktig fisk för en bättre balans.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "leverpastej": {
+    title: "Är leverpastej nyttigt?",
+    subtitle: "En svensk klassiker på smörgåsen — men innehåller natriumnitrit.",
+    emoji: "🥪",
+    level: 4,
+    levelName: "Ultrabearbetat",
+    verdict: "🫣 Spara till helgen",
+    intro: "Leverpastej på knäckebrödet är ett av Sveriges mest klassiska mellanmål. Den smakar bra, den mättar, och den verkar som ett naturligt val. Men leverpastej innehåller natriumnitrit — samma konserveringsmedel som finns i bacon och falukorv — och är nivå 4 ultrabearbetat.",
+    sections: [
+      {
+        heading: "Vad innehåller leverpastej?",
+        body: "Fläsklever och fett — men också natriumnitrit (E250), E471 (emulgator), modifierad stärkelse och smakämnen. Natriumnitrit ger pastejen dess rosa färg och förhindrar farliga bakterier — men WHO klassar bearbetade köttprodukter med nitriter som Grupp 1-cancerframkallande.",
+      },
+      {
+        heading: "Är lever i sig nyttigt?",
+        body: "Ja — lever är ett av de mest näringsrika livsmedlen som finns, rikt på järn, B-vitaminer och A-vitamin. Problemet är inte levern — det är de industriella tillsatserna som omger den i pastejformen.",
+      },
+      {
+        heading: "Hur ofta kan man äta den?",
+        body: "Leverpastej ibland är okej. WHO:s varning gäller vid hög konsumtion av bearbetat kött — inte en klick på smörgåsen en gång i veckan. Men om du äter det dagligen är det värt att tänka på alternativ.",
+      },
+      {
+        heading: "Renare alternativ",
+        body: "Äkta stekt lever med lök är nivå 1 och dramatiskt mer näringsrikt än pastej. Avokado, ägg eller naturlig ost är bra pålägg som ger mättnad utan nitriter.",
+      },
+    ],
+    conclusion: "Leverpastej är god och mättande men ultrabearbetat med natriumnitrit. Ät den ibland — men inte som dagligt pålägg. Välj renare alternativ till vardags.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "cottage-cheese": {
+    title: "Är cottage cheese nyttigt?",
+    subtitle: "Ser industriellt ut — men är egentligen bara mjölk och kulturer.",
+    emoji: "🧀",
+    level: 2,
+    levelName: "Vardagsmat",
+    verdict: "😊 Bra vardagsmat — ett av de renaste mejerisnacksen",
+    intro: "Cottage cheese ser ut som något som tillverkats i en fabrik — vita klumpar i en plastburk, konstigt utseende. Men ingredienslistan berättar en helt annan historia. Cottage cheese är ett av de renaste mejerisnacksen du kan köpa.",
+    sections: [
+      {
+        heading: "Vad innehåller cottage cheese?",
+        body: "Mjölk, grädde, mjölksyrekulturer och salt — ibland bara de tre första. Det är allt. Ingen modifierad stärkelse, inga emulgatorer, inga smakämnen. Trots det industriella utseendet är det ett remarkabelt rent livsmedel på nivå 2.",
+      },
+      {
+        heading: "Hur mycket protein innehåller det?",
+        body: "Cottage cheese innehåller 11-13g protein per 100g — jämförbart med kvarg. Det gör det till ett utmärkt proteinalternativ för den som tränar eller vill hålla sig mätt länge.",
+      },
+      {
+        heading: "Hur äter man det?",
+        body: "Med bär och lite honung som frukost, som fyllning i wrap, som dip med grönsaker, eller bara med lite salt och peppar. Den neutrala smaken gör det flexibelt i matlagning.",
+      },
+      {
+        heading: "Vad ska man undvika?",
+        body: "Smaksatta varianter tillsätter socker och smakämnen som höjer bearbetningsnivån. Välj alltid naturell och lägg till egna smaker.",
+      },
+    ],
+    conclusion: "Cottage cheese förtjänar sitt hälsosammare rykte — det är ett av de renaste mejerisnacksen i svenska butiker. Låt inte utseendet lura dig.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "naturell-kvarg": {
+    title: "Är naturell kvarg nyttigt?",
+    subtitle: "Proteintrendens renaste val — bara silet mjölk.",
+    emoji: "🫙",
+    level: 2,
+    levelName: "Vardagsmat",
+    verdict: "😊 Bra vardagsmat — ett av de renaste proteinalternativen",
+    intro: "Kvarg har exploderat i popularitet i Sverige — och till skillnad från många andra hälsotrender lever naturell kvarg faktiskt upp till sitt rykte. Det är ett av de renaste proteinalternativen i mejeriavdelningen.",
+    sections: [
+      {
+        heading: "Vad är kvarg egentligen?",
+        body: "Kvarg är silet mjölk — vasslen tas bort för att koncentrera proteinet. Ingredienslistan är kort: mjölk och mjölksyrekulturer. Det är nivå 2, ett baslivsmedel med minimal bearbetning trots det höga proteininnehållet.",
+      },
+      {
+        heading: "Hur jämförs naturell mot smaksatt?",
+        body: "Naturell kvarg är nivå 2 med 2-3 ingredienser. Smaksatt kvarg är nivå 4 med glukossirap, artificiella smakämnen och emulgatorer. Välj alltid naturell och lägg till egna smaker.",
+      },
+      {
+        heading: "Är det bättre än proteinbars?",
+        body: "Dramatiskt renare. En proteinbar med samma mängd protein innehåller maltodextrin, sukralos och artificiella smakämnen — nivå 4. Kvarg ger samma protein med en bråkdel av bearbetningen och är ofta billigare.",
+      },
+      {
+        heading: "Hur äter man det?",
+        body: "Med bär och honung, i smoothies, som bas i såser istället för gräddfil, eller direkt ur burken. Lindahls och Arla har bra naturella varianter.",
+      },
+    ],
+    conclusion: "Naturell kvarg är ett av de bästa proteinalternativen i svenska butiker — rent, billigt och mångsidigt. Välj alltid naturell och smaksätt själv.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "creme-fraiche": {
+    title: "Är crème fraiche nyttigt?",
+    subtitle: "Folk undviker det för fettet — men det är ett av kökets renaste ingredienser.",
+    emoji: "🥛",
+    level: 2,
+    levelName: "Vardagsmat",
+    verdict: "😊 Bra vardagsmat — använd det i matlagning utan skuldkänslor",
+    intro: "Crème fraiche undviks av många som försöker äta hälsosamt — för mycket fett, för många kalorier. Men ur ett NOVA-perspektiv är crème fraiche ett av de renaste mejeriprodukterna du kan köpa.",
+    sections: [
+      {
+        heading: "Vad innehåller crème fraiche?",
+        body: "Grädde och mjölksyrekulturer — ibland med lite salt. Det är allt. Inga emulgatorer, inga stabilisatorer, inga industriella tillsatser. Den korta ingredienslistan placerar den i NOVA-nivå 2.",
+      },
+      {
+        heading: "Hur jämförs det med matlagningsgrädde?",
+        body: "Matlagningsgrädde är nivå 1-2 — vanlig grädde. Crème fraiche är samma råvara men fermenterad, vilket ger den tjockare konsistens och syra. Båda är rena val i matlagning.",
+      },
+      {
+        heading: "Är fettet ett problem?",
+        body: "Fett från naturliga mejeriprodukter är inte det hälsoproblem det en gång utpekades som. Crème fraiche i normala mängder som del av en varierad kost är inget att oroa sig för — särskilt jämfört med de industriella alternativ som marknadsförs som lättare.",
+      },
+      {
+        heading: "Hur använder man det?",
+        body: "I såser, soppor, som topping på tacos eller baked potato, i bakning eller som dip. Det tål hög värme utan att skära sig — vilket gör det utmärkt i varm matlagning.",
+      },
+    ],
+    conclusion: "Crème fraiche är ett rent baslivsmedel som förtjänar sin plats i köket. Undvik det inte för fettets skull — det är renare än många av de 'lättare' alternativen.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "helfett-mjolk": {
+    title: "Är helfett mjölk nyttigt?",
+    subtitle: "Lättmjölk marknadsförs som hälsosammare — men helfett är faktiskt renare.",
+    emoji: "🥛",
+    level: 2,
+    levelName: "Vardagsmat",
+    verdict: "😊 Bra vardagsmat — renare än lättmjölk",
+    intro: "I decennier har lättmjölk och minimjölk marknadsförts som det hälsosammare valet. Men ur ett NOVA-perspektiv är helfett mjölk faktiskt renare — och forskningen om mättat fett från mejeri är mer nyanserad än vad vi fick lära oss.",
+    sections: [
+      {
+        heading: "Vad är skillnaden?",
+        body: "Helfett mjölk är mjölk — nivå 1. Lättmjölk är mjölk där fett avlägsnats industriellt, och ibland tillsätts vitaminer och stabilisatorer för att kompensera — nivå 2-3 beroende på märke. Ju mer bearbetat, desto längre ingredienslista.",
+      },
+      {
+        heading: "Är det mättade fettet farligt?",
+        body: "Aktuell forskning tyder på att mättat fett från mejeriprodukter inte är lika problematiskt som från processade köttprodukter. Mjölkfett innehåller en komplex blandning av fettsyror som kroppen hanterar annorlunda än industriella fetter.",
+      },
+      {
+        heading: "Håller helfett mjölk dig mättare?",
+        body: "Ja — fett bromsar tömningen av magen och håller blodsockret stabilare. Ett glas helfett mjölk håller dig mättare längre än samma mängd lättmjölk, vilket kan minska snackandet.",
+      },
+      {
+        heading: "Vilket märke ska man välja?",
+        body: "Arla och Skånemejerier har båda bra naturella alternativ. Välj ekologisk om det finns inom budget — men vanlig helfett mjölk är redan ett rent val.",
+      },
+    ],
+    conclusion: "Helfett mjölk är renare och mer mättande än lättmjölk. Fettskräcken från 1980-talet håller på att skrivas om — och mejerifett är inte den bov det utpekades som.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "frysta-artor": {
+    title: "Är frysta ärtor nyttiga?",
+    subtitle: "Frysta grönsaker verkar bearbetade — men de fryses samma dag som de skördas.",
+    emoji: "🫛",
+    level: 1,
+    levelName: "Så rent som det blir",
+    verdict: "🌱 Så rent som det blir — ät dem varje dag",
+    intro: "Det finns en utbredd uppfattning att färska grönsaker alltid är bättre än frysta. Men frysta ärtor är ett av de bästa exemplen på att frysning inte är bearbetning — de är NOVA-nivå 1 och kan faktiskt vara mer näringsrika än 'färska' ärtor som legat i butiken i dagar.",
+    sections: [
+      {
+        heading: "Hur tillverkas frysta ärtor?",
+        body: "Ärtor skördas, blancheras snabbt i varmt vatten för att bevara färgen, och fryses inom timmar efter skörd. Det är allt. Inga tillsatser, inga konserveringsmedel, inga industriella ingredienser. En ingrediens: ärtor.",
+      },
+      {
+        heading: "Är de lika nyttiga som färska?",
+        body: "Ja — och ibland mer. Färska ärtor i butik kan ha legat i transport och kylkedja i 3-5 dagar, under vilken tid näringsämnena bryts ner. Frysta ärtor behåller sina vitaminer bättre tack vare den snabba frysningen direkt efter skörd.",
+      },
+      {
+        heading: "Gäller detta alla frysta grönsaker?",
+        body: "De flesta frysta grönsaker utan tillsatser är nivå 1. Kolla ingredienslistan — den ska bara innehålla grönsaken ifråga. Frysta grönsaker med sås eller kryddning kan vara nivå 3-4.",
+      },
+      {
+        heading: "Hur använder man dem bäst?",
+        body: "Lägg dem direkt i grytor, soppor och pastarätter utan att tina dem först. De är snabbare att tillaga än färska och håller längre i frysen — ett utmärkt baslivsmedel att alltid ha hemma.",
+      },
+    ],
+    conclusion: "Frysta ärtor är ett perfekt exempel på att 'bearbetat' inte alltid betyder dåligt. Frysning är minimalt bearbetning — och frysta ärtor är nivå 1, lika rena som färska.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
+
+  "kikartor": {
+    title: "Är kikärtor (konserv) nyttiga?",
+    subtitle: "Konservburk låter bearbetat — men det är bara kikärtor och vatten.",
+    emoji: "🫘",
+    level: 2,
+    levelName: "Vardagsmat",
+    verdict: "😊 Bra vardagsmat — konserv betyder inte bearbetat här",
+    intro: "Konservburkar har dåligt rykte i hälsosammanhang — men inte alla konserver är lika. Kikärtor på konserv är ett av de renaste livsmedlen du kan öppna ur en burk, och ett utmärkt exempel på att förpackningsform inte avgör bearbetningsgrad.",
+    sections: [
+      {
+        heading: "Vad innehåller konservkikärtor?",
+        body: "Kikärtor, vatten och ibland lite salt. Det är allt. Ingen modifierad stärkelse, inga emulgatorer, inga konserveringsmedel. Konserveringen sker genom värmebehandling, inte kemiska tillsatser — samma princip som att koka mat hemma.",
+      },
+      {
+        heading: "Är de lika nyttiga som torkade?",
+        body: "Nästan. Torkade kikärtor som du blötlägger och kokar själv är nivå 1. Konservkikärtor är nivå 2 på grund av konserveringsprocessen, men näringsvärdet är jämförbart. De sparar tid utan att offra mycket näringskvalitet.",
+      },
+      {
+        heading: "Vad är de bra för?",
+        body: "Kikärtor är rika på protein, fiber och komplexa kolhydrater. De håller blodsockret stabilt och håller dig mätt länge. De är en av de bästa växtbaserade proteinkällorna och passar i soppor, currys, hummus och sallader.",
+      },
+      {
+        heading: "Vad ska man kolla på burken?",
+        body: "Ingredienslistan ska vara kort — kikärtor, vatten, eventuellt salt. Välj märken utan tillsatt socker eller konserveringsmedel. ICA och Eldorado har bra basversioner.",
+      },
+    ],
+    conclusion: "Konservkikärtor är ett av de enklaste sätten att äta rent och billigt. Öppna burken, skölj av och lägg i maten — det är allt som behövs.",
+    cta: "Kolla en annan mat på FoodLens →",
+  },
 };
 
 const levelColor: Record<number, string> = {
@@ -397,9 +787,9 @@ export default async function SwedishArticlePage({
         {/* CTA */}
         <Link
           href="/"
-          className="block w-full text-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium py-3 px-6 rounded-xl hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors mb-8"
+          className="block w-full text-center border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white font-medium py-3 px-6 rounded-xl hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-colors mb-8"
         >
-          {article.cta}
+          Kolla en annan mat på FoodLens →
         </Link>
 
         {/* Related articles */}

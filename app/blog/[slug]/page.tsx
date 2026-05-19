@@ -253,6 +253,216 @@ const articles: Record<string, {
     conclusion: "Rice cakes are not terrible — but they are not the clean diet food they are marketed as. They are moderately processed, spike blood sugar quickly, and do not keep you full. For a genuinely clean snack, plain nuts or vegetables are a better choice.",
     cta: "Check your snacks on FoodLens →",
   },
+
+  "is-falukorv-healthy": {
+    title: "Is Falukorv Healthy?",
+    subtitle: "A Swedish classic — but what is it actually made of?",
+    emoji: "🌭",
+    level: 4,
+    levelName: "Ultra processed",
+    verdict: "🫣 Keep as a treat",
+    intro: "Falukorv is one of Sweden's most beloved foods. Fried with macaroni, baked in pastry or sliced on bread — it sits in almost every Swedish fridge. But when you check the NOVA classification, falukorv lands at level 4, the same category as crisps and fast food. Here is why.",
+    sections: [
+      {
+        heading: "What is falukorv actually made of?",
+        body: "Falukorv contains beef, pork and rind — but also sodium nitrite (preservative), E450 (phosphates), modified starch and flavourings. It is these additives that place it in NOVA level 4. A plain piece of meat is level 1. Falukorv is industrially processed with ingredients you would never use at home.",
+      },
+      {
+        heading: "What does sodium nitrite do?",
+        body: "Sodium nitrite is the preservative that gives falukorv its characteristic pink colour and prevents dangerous bacteria. The WHO classifies processed meat products containing nitrites as Group 1 carcinogens — the same category as tobacco. This does not mean eating falukorv occasionally will cause cancer, but it is a reason not to eat it every day.",
+      },
+      {
+        heading: "How does it compare to plain meat?",
+        body: "A chicken fillet is level 1 — just meat, no additives. Falukorv is level 4 because of the industrial ingredients. It is the same difference as between a whole tomato and ketchup — the raw ingredient is there, but it is surrounded by industrial processing.",
+      },
+      {
+        heading: "What to eat instead?",
+        body: "Chicken breast, turkey or fish are all level 1 with similar satiety but without the additives. If you love falukorv — eat it occasionally, enjoy it, but do not make it a daily dinner habit.",
+      },
+    ],
+    conclusion: "Falukorv is part of Swedish food culture and it is fine to eat occasionally. But it is ultra processed food and not something you should eat every day. Choose unprocessed meat on weekdays and save falukorv for a treat.",
+    cta: "Check falukorv on FoodLens →",
+  },
+
+  "is-butter-healthy": {
+    title: "Is Butter Actually Bad For You?",
+    subtitle: "Butter had a terrible reputation for decades — but is it really deserved?",
+    emoji: "🧈",
+    level: 2,
+    levelName: "Everyday food",
+    verdict: "😊 Good everyday food — use it without guilt",
+    intro: "Butter was labelled a health hazard for decades — too much saturated fat, too many calories, switch to margarine. But when you check the NOVA classification, butter is level 2, one of the cleanest dairy products you can buy. And margarine? Often level 4.",
+    sections: [
+      {
+        heading: "What is in butter?",
+        body: "Butter contains cream and salt — sometimes just cream. That is it. No emulsifiers, no stabilisers, no industrial additives. This short ingredient list places butter in NOVA level 2, alongside olive oil and other staple foods.",
+      },
+      {
+        heading: "What about the saturated fat?",
+        body: "The research on saturated fat and heart health is more nuanced than was communicated in the 1980s and 90s. Current evidence suggests that butter in normal amounts as part of a varied diet is not the health problem it was once thought to be. The raw fat content is not the same as the degree of processing.",
+      },
+      {
+        heading: "How does it compare to margarine?",
+        body: "Margarine is often marketed as a healthier alternative to butter — but most margarines are level 3-4 with long ingredient lists including hardened fats, emulsifiers and flavourings. Butter with its 1-2 ingredients is dramatically cleaner than most margarines.",
+      },
+      {
+        heading: "How should you use butter?",
+        body: "Butter is excellent for frying, baking and as a spread. It is a staple food that has been used for thousands of years. Use it in cooking without guilt — it is one of the cleanest fats you can buy in a Swedish supermarket.",
+      },
+    ],
+    conclusion: "Butter is not the health hazard it was once labelled. It is a staple food with a short ingredient list and minimal processing. Margarine is often a worse choice from a NOVA perspective, despite being marketed as healthier.",
+    cta: "Check butter on FoodLens →",
+  },
+
+  "is-oatmeal-healthy": {
+    title: "Is Oatmeal the Healthiest Breakfast?",
+    subtitle: "The classic Swedish breakfast — and one of the cleanest foods you can eat.",
+    emoji: "🌾",
+    level: 1,
+    levelName: "As clean as it gets",
+    verdict: "🌱 As clean as it gets — eat it every day",
+    intro: "Oatmeal is one of the few foods that actually lives up to its healthy reputation. NOVA level 1 — minimally processed, one ingredient, no additives. But there is an important difference between plain oats and flavoured instant versions.",
+    sections: [
+      {
+        heading: "What is in plain oats?",
+        body: "Plain rolled oats contain one thing — oats. It is a whole grain that has been rolled into flakes. No added sugar, no flavourings, no preservatives. This is exactly what NOVA level 1 is about: unprocessed or minimally processed food.",
+      },
+      {
+        heading: "How do flavoured oat products compare?",
+        body: "Flavoured instant oats — strawberry, chocolate, honey — look like oatmeal but often contain glucose syrup, artificial flavourings and maltodextrin. They are level 3-4. Same base ingredient, but surrounded by industrial additives. Always buy plain oats and add your own toppings.",
+      },
+      {
+        heading: "Why are oats so good?",
+        body: "Oats contain beta-glucan, a soluble fibre linked to lower cholesterol and better blood sugar control. They keep you full for a long time due to the slow breakdown. As a breakfast choice, they are one of the most scientifically well-supported options available.",
+      },
+      {
+        heading: "How to eat them best?",
+        body: "Cook them in water or milk and add your own toppings — berries, nuts, a little honey or cinnamon. You control what goes in, and the base is level 1. It is dramatically cleaner and often cheaper than pre-packaged breakfast products.",
+      },
+    ],
+    conclusion: "Oatmeal is one of the best breakfasts you can eat — cheap, filling and level 1. Buy plain rolled oats and avoid flavoured versions. Add your own toppings and you have full control.",
+    cta: "Check your oats on FoodLens →",
+  },
+
+  "is-kvarg-healthy": {
+    title: "Is Kvarg (Quark) Actually Healthy?",
+    subtitle: "The protein trend everyone loves — but what is kvarg really?",
+    emoji: "🫙",
+    level: 2,
+    levelName: "Everyday food",
+    verdict: "😊 Good everyday food — one of the cleanest protein snacks",
+    intro: "Kvarg (quark) has become one of Sweden's most popular protein choices — at the gym, as a snack, as a dessert with berries. And unlike many health trend products, kvarg actually lives up to its reputation. Here is why.",
+    sections: [
+      {
+        heading: "What is kvarg?",
+        body: "Kvarg is strained milk — milk that has had the whey removed to concentrate the protein. The ingredient list is short: milk and live cultures, sometimes a little salt. It is level 2, the same category as butter and olive oil. Despite looking like a processed product, it is remarkably clean.",
+      },
+      {
+        heading: "How does flavoured kvarg compare?",
+        body: "Plain kvarg is level 2. Flavoured kvarg — strawberry, vanilla, chocolate — often contains glucose syrup, artificial flavourings and stabilisers that push it to level 3-4. Same base product, very different processing level. Always buy plain and add your own toppings.",
+      },
+      {
+        heading: "How does it compare to protein bars?",
+        body: "A protein bar with the same amount of protein as kvarg often contains maltodextrin, sucralose, artificial flavourings and a range of emulsifiers — level 4. Kvarg with 2-3 ingredients delivers the same protein with a fraction of the processing and is usually cheaper.",
+      },
+      {
+        heading: "How to eat kvarg?",
+        body: "With berries and a little honey, as a smoothie base, in cooking as an alternative to sour cream, or straight from the tub with a spoon. The neutral flavour makes it versatile.",
+      },
+    ],
+    conclusion: "Kvarg is one of the cleanest high-protein foods you can buy in Sweden. Choose plain, add your own flavours, and you have an excellent everyday snack at level 2.",
+    cta: "Check kvarg on FoodLens →",
+  },
+
+  "is-filmjolk-healthy": {
+    title: "Is Filmjölk (Swedish Fermented Milk) Healthy?",
+    subtitle: "A Swedish dairy product with a long history — and a surprisingly clean ingredient list.",
+    emoji: "🥛",
+    level: 2,
+    levelName: "Everyday food",
+    verdict: "😊 Good everyday food — one of Sweden's cleanest dairy products",
+    intro: "Filmjölk has been part of the Swedish breakfast table for generations. This fermented milk has a long tradition and — it turns out — one of the cleanest ingredient lists you will find in the dairy section.",
+    sections: [
+      {
+        heading: "What is in filmjölk?",
+        body: "Filmjölk contains milk and live cultures — sometimes just that. It is a fermented food, just like yogurt and kvarg, with a short and recognisable ingredient list. NOVA level 2 is the right classification for a staple food with minimal processing.",
+      },
+      {
+        heading: "What is fermentation and why is it good?",
+        body: "Fermentation means bacteria convert lactose into lactic acid, giving filmjölk its characteristic sour taste. Fermented foods are linked to better gut health and are easier to digest for people sensitive to lactose. It is one of the oldest preservation methods in existence.",
+      },
+      {
+        heading: "Is it better than regular milk?",
+        body: "Regular milk is level 1-2, filmjölk is level 2 — they are comparable. Filmjölk adds live cultures that regular milk does not have. Both are clean choices. Choose whichever taste you prefer.",
+      },
+      {
+        heading: "What to avoid?",
+        body: "Flavoured filmjölk — strawberry, vanilla — adds sugar and flavourings that raise the processing level. Plain filmjölk is always the cleanest choice. Add your own toppings if you want more flavour.",
+      },
+    ],
+    conclusion: "Filmjölk is one of the cleanest dairy products in Swedish supermarkets. Choose plain, eat it for breakfast or as a snack, and you have a genuine level 2 food with a long Swedish tradition.",
+    cta: "Check filmjölk on FoodLens →",
+  },
+
+  "is-knackebrod-healthy": {
+    title: "Is Crispbread (Knäckebröd) Healthy?",
+    subtitle: "Sweden's most iconic bread — but not all crispbreads are equally clean.",
+    emoji: "🍞",
+    level: 2,
+    levelName: "Everyday food",
+    verdict: "😊 Good everyday food — but check the ingredient list",
+    intro: "Crispbread is a staple in Swedish kitchens and has a well-earned healthy reputation. But there is a big difference between a genuinely clean crispbread and the processed versions with long ingredient lists. Here is what to look for.",
+    sections: [
+      {
+        heading: "What is in clean crispbread?",
+        body: "The cleanest crispbread has just 3-4 ingredients — rye flour, water, salt and possibly yeast. Wasa Rågi and Leksands original are examples with short ingredient lists. These are level 2, a staple food with minimal processing.",
+      },
+      {
+        heading: "Which crispbreads are more processed?",
+        body: "Flavoured varieties — with seeds, herbs, cheese or sweet variants — often contain E471 (emulsifier), glucose syrup and flavourings that push them to level 3. Always check the ingredient list. The shorter, the better.",
+      },
+      {
+        heading: "Is it better than regular bread?",
+        body: "Regular sliced bread from the supermarket often contains E471, calcium propionate and modified starch — level 3-4. Clean crispbread is in most cases significantly cleaner than sliced bread, and it keeps for a long time without preservatives thanks to its low moisture content.",
+      },
+      {
+        heading: "What to top it with?",
+        body: "Butter, cheese, avocado, eggs — all good choices. Avoid pre-packaged toppings with long ingredient lists. Clean crispbread deserves a clean topping.",
+      },
+    ],
+    conclusion: "Crispbread can be an excellent choice — but not all varieties are equally clean. Check the ingredient list and choose one with 3-5 ingredients. Wasa and Leksands have good basic versions.",
+    cta: "Check crispbread on FoodLens →",
+  },
+
+  "are-meatballs-healthy": {
+    title: "Are Swedish Meatballs Healthy?",
+    subtitle: "Homemade or store-bought — it makes a huge difference to the NOVA level.",
+    emoji: "🍖",
+    level: 3,
+    levelName: "Moderately processed",
+    verdict: "🤔 Depends — homemade is level 2, store-bought is level 3-4",
+    intro: "Swedish meatballs are a national dish — and a perfect example of how the same meal can be either level 2 or level 4 depending on whether you make them yourself or buy them ready-made. Here is the difference.",
+    sections: [
+      {
+        heading: "Homemade meatballs — level 2",
+        body: "Homemade meatballs have 5-6 ingredients — beef mince, egg, onion, breadcrumbs, salt and pepper. These are all staple foods, no industrial additives, level 2. You know exactly what is in them and can adjust to taste.",
+      },
+      {
+        heading: "Store-bought meatballs — level 3-4",
+        body: "Ready-made meatballs often contain E450 (phosphates), modified starch, flavourings and sometimes E621 (MSG). Phosphates are used to hold the meatballs together and give them a consistent texture at industrial scale. These additives place them in level 3-4.",
+      },
+      {
+        heading: "Does it matter in practice?",
+        body: "Eating ready-made meatballs occasionally is not a disaster. But if you eat them regularly, it is worth knowing that homemade are dramatically cleaner. And homemade Swedish meatballs actually take no more than 20 minutes to make.",
+      },
+      {
+        heading: "Recipe for cleaner meatballs",
+        body: "500g beef mince, 1 egg, 1 small onion (grated), 2 tbsp breadcrumbs, salt and pepper. Mix, roll into balls, fry in butter. That is it. Freeze a batch and you always have homemade meatballs in the freezer.",
+      },
+    ],
+    conclusion: "Meatballs are great — but it matters whether they are homemade or store-bought. Make a large batch at home occasionally and freeze them. You get a level 2 food with full control over the ingredients.",
+    cta: "Check meatballs on FoodLens →",
+  },
 };
 
 const levelColor: Record<number, string> = {
@@ -371,9 +581,9 @@ export default async function ArticlePage({
         {/* CTA */}
         <Link
           href="/"
-          className="block w-full text-center bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium py-3 px-6 rounded-xl hover:bg-gray-700 dark:hover:bg-gray-200 transition-colors mb-8"
+          className="block w-full text-center border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white font-medium py-3 px-6 rounded-xl hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-colors mb-8"
         >
-          {article.cta}
+          Check another food on FoodLens →
         </Link>
 
         {/* Related articles */}
