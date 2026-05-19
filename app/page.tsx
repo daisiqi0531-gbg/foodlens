@@ -553,6 +553,12 @@ export default function Home() {
               Food Myths
             </a>
             <a
+              href="/svenska-livsmedel"
+              className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+            >
+              Svenska livsmedel
+            </a>
+            <a
               href="/privacy"
               className="text-xs text-gray-400 underline hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
             >
